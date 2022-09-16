@@ -49,12 +49,82 @@ public class TestAlphaCiv {
   @Test
   public void shouldBeRedAsStartingPlayer() {
     assertThat(game, is(notNullValue()));
-    // TODO: reenable the assert below to get started...
-    // assertThat(game.getPlayerInTurn(), is(Player.RED));
+    assertThat(game.getPlayerInTurn(), is(Player.RED));
+  }
+
+  @Test
+  public void verifyStartingTileLayout(){
+    assertThat(game, is(notNullValue()));
+    for(int c = 0; c < GameConstants.WORLDSIZE; c++){
+      for(int r = 0; r < GameConstants.WORLDSIZE; r++){
+        if(r == 1 & c == 0){
+          assertThat(game.getTileAt(new Position(1,0)), is(GameConstants.OCEANS));
+        }else if(r == 0 & c == 1){
+          assertThat(game.getTileAt(new Position(0,1)), is(GameConstants.HILLS));
+        }else if(r == 2 & c == 2){
+          assertThat(game.getTileAt(new Position(2,2)), is(GameConstants.MOUNTAINS));
+        }else{
+          assertThat(game.getTileAt(new Position(r,c)), is(GameConstants.PLAINS));
+        }
+      }
+    }
+  }
+
+  @Test
+  public void verifyStartingUnitLayout(){
+    assertThat(game, is(notNullValue()));
+    for(int c = 0; c < GameConstants.WORLDSIZE; c++){
+      for(int r = 0; r < GameConstants.WORLDSIZE; r++){
+        if(r == 2 & c == 0){
+          assertThat(game.getUnitAt(new Position(2,0)), is(GameConstants.ARCHER));
+          assertThat(game.getUnitAt(new Position(2,0)).getOwner(), is(Player.RED));
+        }else if(r == 3 & c == 2){
+          assertThat(game.getUnitAt(new Position(3,2)), is(GameConstants.LEGION));
+          assertThat(game.getUnitAt(new Position(3,2)).getOwner(), is(Player.BLUE));
+        }else if(r == 4 & c == 3){
+          assertThat(game.getUnitAt(new Position(4,3)), is(GameConstants.SETTLER));
+          assertThat(game.getUnitAt(new Position(4,3)).getOwner(), is(Player.RED));
+        }else{
+          assertThat(game.getUnitAt(new Position(r,c)), is(nullValue()));
+        }
+      }
+    }
+  }
+
+  @Test
+  public void verifyStartingTownLayout(){
+    assertThat(game, is(notNullValue()));
+    for(int c = 0; c < GameConstants.WORLDSIZE; c++){
+      for(int r = 0; r < GameConstants.WORLDSIZE; r++) {
+        if(r == 1 & c == 1){
+          assertThat(game.getCityAt(new Position(1,1)).getOwner(), is(Player.RED));
+        }else if(r == 4 & c == 1){
+          assertThat(game.getCityAt(new Position(4,1)).getOwner(), is(Player.BLUE));
+        }else{
+          assertThat(game.getCityAt(new Position(r,c)), is(nullValue()));
+        }
+      }
+    }
+  }
+
+  @Test
+  public void verifyStartingAgeIsFourThousandBC(){
+    assertThat(game, is(notNullValue()));
+    assertThat(game.getAge(), is(4000));
+  }
+
+  @Test
+  public void ageAdvancesOneHundredYearsEveryTurn(){
+    assertThat(game, is(notNullValue()));
+    assertThat(game.getAge(), is(4000));
+    for(int i = 0; i < 9; i++){
+      game.endOfTurn();
+      assertThat(game.getAge(), is(4000 - (i * 100)));
+    }
   }
 
   /** REMOVE ME. Not a test of HotCiv, just an example of what
-      matchers the hamcrest library has... */
+      matchers the hamcrest library has...
   @Test
   public void shouldDefinetelyBeRemoved() {
     // Matching null and not null values
@@ -77,5 +147,5 @@ public class TestAlphaCiv {
 
     // Matchers may be combined, like is-not
     assertThat(l.get(0), is(not("Bumse")));
-  }
+  }*/
 }
