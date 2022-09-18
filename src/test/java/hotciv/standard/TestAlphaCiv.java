@@ -6,8 +6,6 @@ import org.junit.*;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
-import java.util.*;
-
 /** Skeleton class for AlphaCiv test cases
  Updated Oct 2015 for using Hamcrest matchers
  This source code is from the book
@@ -117,6 +115,26 @@ public class TestAlphaCiv {
       game.endOfTurn();
       assertThat(game.getAge(), is(-4000 + ((i+1) * 100)));
     }
+  }
+  @Test
+  public void verifyWinner(){
+    assertThat(game, is(notNullValue()));
+    assertThat(game.getWinner(), is(nullValue()));
+    for(int i = 0; i < 10; i++)
+      game.endOfTurn();
+    assertThat(game.getWinner(), is(Player.RED));
+  }
+
+  @Test
+  public void verifyCitySize() {
+    assertThat(game.getCityAt(new Position(1,1)).getSize(), is(1));
+    assertThat(game.getCityAt(new Position(4,1)).getSize(), is(1));
+  }
+
+  @Test
+  public void verifyTreasurySize() {
+    assertThat(game.getCityAt(new Position(1,1)).getTreasury(), is(0));
+    assertThat(game.getCityAt(new Position(4,1)).getTreasury(), is(0));
   }
 
   /** REMOVE ME. Not a test of HotCiv, just an example of what

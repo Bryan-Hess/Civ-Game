@@ -80,13 +80,16 @@ public class GameImpl implements Game {
   public Player getPlayerInTurn() {
     return currentPlayer;
   }
-  public Player getWinner() { return null; }
+  public Player getWinner() {
+    if(currentAge==-3000)
+      return Player.RED;
+    else
+      return null;
+  }
   public int getAge() {
     return currentAge;
   }
-  public boolean moveUnit( Position from, Position to ) {
-    return false;
-  }
+  public boolean moveUnit( Position from, Position to ) {return false;}
   public void endOfTurn() {
     currentAge = currentAge + 100;
     if(currentPlayer==Player.BLUE){

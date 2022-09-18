@@ -7,11 +7,13 @@ import hotciv.framework.Player;
 public class CityImpl implements City {
     private Player owner;
     private int treasury;
+
     private int size;
 
     public CityImpl(Player name){
         owner = name;
         size = 1;
+        treasury=0;
     }
     @Override
     public Player getOwner() {
@@ -25,7 +27,7 @@ public class CityImpl implements City {
 
     @Override
     public int getTreasury() {
-        return 0;
+        return treasury;
     }
 
     @Override
