@@ -89,7 +89,46 @@ public class GameImpl implements Game {
   public int getAge() {
     return currentAge;
   }
-  public boolean moveUnit( Position from, Position to ) {return false;}
+  public boolean moveUnit( Position from, Position to ) {
+    int oldR,oldC,newR,newC;
+    oldR = from.getRow();
+    oldC = from.getColumn();
+    newR = to.getRow();
+    newC = to.getColumn();
+
+    if(unitMap.get(from).getOwner() != currentPlayer){
+      return false;
+    }
+
+    if(tileMap.get(to).getTypeString() == GameConstants.OCEANS || tileMap.get(to).getTypeString() == GameConstants.MOUNTAINS ){
+      return false;
+    }
+
+    if(java.lang.Math.abs(newR-oldR)>1 || java.lang.Math.abs(newC-oldC)>1){
+      return false;
+    }
+    if(unitMap.get(to)!=null){
+      if(currentPlayer==unitMap.get(to).getOwner()){
+        return false; //if the player tries to move their unit on a tile that already has one of their units
+      }
+      else{
+        //In future iterations, we will compare attacking/defending strength.
+        //For this iteration, we do not need to compare stats, because the attacker always wins
+        unitMap.remove(to);
+        unitMap.put(to,unitMap.get(from));
+        unitMap.remove(from);
+        unitMap.get(to).countMove();
+        return true;
+      }
+    }
+    else{
+
+      unitMap.put(to,unitMap.get(from));
+      unitMap.remove(from);
+      unitMap.get(to).countMove();
+      return true;}
+
+  }
   public void endOfTurn() {
     currentAge = currentAge + 100;
     if(currentPlayer==Player.BLUE){
@@ -97,6 +136,14 @@ public class GameImpl implements Game {
     }
     else{
       currentPlayer = Player.BLUE;
+    }
+    for (int i=0;i<GameConstants.WORLDSIZE;i++)
+    {
+      for(int j=0;j<GameConstants.WORLDSIZE;j++){
+        if(unitMap.get(new Position(i,j))!=null){
+          unitMap.get(new Position(i,j)).resetMoveCount();
+        }
+      }
     }
   }
   public void changeWorkForceFocusInCityAt( Position p, String balance ) {}

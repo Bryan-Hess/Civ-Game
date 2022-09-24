@@ -136,7 +136,46 @@ public class TestAlphaCiv {
     assertThat(game.getCityAt(new Position(1,1)).getTreasury(), is(0));
     assertThat(game.getCityAt(new Position(4,1)).getTreasury(), is(0));
   }
+  @Test
+  public void verifyUnitCannotBeMovedByWrongPlayer(){
+    assertThat(game, is(notNullValue()));
+    assertThat(game.getPlayerInTurn(), is(Player.RED));
+    assertThat(game.moveUnit(new Position(3,2),new Position(4,2)),is(false));
+  }
 
+  @Test
+  public void verifyUnitCannotMoveOnWrongTerrains(){
+    assertThat(game, is(notNullValue()));
+    assertThat(game.getPlayerInTurn(), is(Player.RED));
+    assertThat(game.moveUnit(new Position(2,0),new Position(1,0)),is(false));
+  }
+
+  @Test
+  public void verifyUnitCannotMoveTooFar(){
+    assertThat(game, is(notNullValue()));
+    assertThat(game.getPlayerInTurn(), is(Player.RED));
+    assertThat(game.moveUnit(new Position(2,0),new Position(4,0)),is(false));
+    assertThat(game.moveUnit(new Position(2,0),new Position(2,6)),is(false));
+  }
+
+  @Test
+  public void verifySuccessfulMove(){
+    assertThat(game, is(notNullValue()));
+    assertThat(game.getPlayerInTurn(), is(Player.RED));
+    assertThat(game.moveUnit(new Position(2,0),new Position(2,1)),is(true));
+    assertThat(game.getUnitAt(new Position(2,1)).getTypeString(), is(GameConstants.ARCHER));
+    assertThat(game.getUnitAt(new Position(2,1)).getOwner(), is(Player.RED));
+    assertThat(game.getUnitAt(new Position(2,0)), is(nullValue()));
+  }
+  @Test
+  public void verifyRedSuccessfullyAttacksBlue(){
+    assertThat(game, is(notNullValue()));
+    assertThat(game.getPlayerInTurn(), is(Player.RED));
+    assertThat(game.moveUnit(new Position(4,3),new Position(3,2)),is(true));
+    assertThat(game.getUnitAt(new Position(3,2)).getTypeString(), is(GameConstants.SETTLER));
+    assertThat(game.getUnitAt(new Position(3,2)).getOwner(), is(Player.RED));
+    assertThat(game.getUnitAt(new Position(4,3)), is(nullValue()));
+  }
   /** REMOVE ME. Not a test of HotCiv, just an example of what
    matchers the hamcrest library has...
    @Test
