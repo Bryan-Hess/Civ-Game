@@ -127,14 +127,14 @@ public class TestAlphaCiv {
   }
 
   @Test
-  public void verifyCitySizeIs1() {
+  public void verifyCitySizeIsOne() {
     assertThat(game, is(notNullValue()));
     assertThat(game.getCityAt(new Position(1,1)).getSize(), is(1));
     assertThat(game.getCityAt(new Position(4,1)).getSize(), is(1));
   }
 
   @Test
-  public void verifyTreasurySizeIs0() {
+  public void verifyTreasurySizeIsZero() {
     assertThat(game, is(notNullValue()));
     assertThat(game.getCityAt(new Position(1,1)).getTreasury(), is(0));
     assertThat(game.getCityAt(new Position(4,1)).getTreasury(), is(0));
@@ -162,7 +162,7 @@ public class TestAlphaCiv {
   }
 
   @Test
-  public void verifyUnitSuccessfullyMovesTHISISABUG(){
+  public void verifyUnitSuccessfullyMovesOneTile(){
     assertThat(game, is(notNullValue()));
     assertThat(game.getPlayerInTurn(), is(Player.RED));
     assertThat(game.moveUnit(new Position(2,0),new Position(2,1)),is(true));
@@ -180,7 +180,7 @@ public class TestAlphaCiv {
     assertThat(game.getUnitAt(new Position(4,3)), is(nullValue()));
   }
   @Test
-  public void verifyTreasuryIncrementsBy6EachTurn(){
+  public void verifyTreasuryIncrementsBySixEachTurn(){
     assertThat(game, is(notNullValue()));
     for(int i = 0; i < 5; i++)
       game.endOfTurn();
@@ -205,7 +205,7 @@ public class TestAlphaCiv {
     assertThat(game.getCityAt(new Position(1,1)).getTreasury(), is(2));
   }
   @Test
-  public void verifyBlueCityProducesNewLegionsInCLockWise(){
+  public void verifyBlueCityProducesNewLegionsInClockwise(){
     assertThat(game, is(notNullValue()));
     game.changeProductionInCityAt(new Position(4,1),"legion");
     for(int i = 0; i < 5; i++)
