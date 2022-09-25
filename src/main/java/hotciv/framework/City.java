@@ -62,4 +62,14 @@ public interface City {
    */
   public String getWorkforceFocus();
 
+
+  /** set the work force's focus in this city.
+   * @String prod: what type of unit the city will produce
+   */
+  public void setProduction(String prod);
+
+  /** set treasury in this city.
+   * @int amount: amount of production to be added or removed from the treasury
+   */
+  public void setTreasury(int amount);
 }

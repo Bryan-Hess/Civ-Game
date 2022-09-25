@@ -176,6 +176,41 @@ public class TestAlphaCiv {
     assertThat(game.getUnitAt(new Position(3,2)).getOwner(), is(Player.RED));
     assertThat(game.getUnitAt(new Position(4,3)), is(nullValue()));
   }
+  @Test
+  public void verifyTreasuryIncriment(){
+    assertThat(game, is(notNullValue()));
+    for(int i = 0; i < 5; i++)
+      game.endOfTurn();
+    assertThat(game.getCityAt(new Position(1,1)).getTreasury(), is(30));
+    assertThat(game.getCityAt(new Position(4,1)).getTreasury(), is(30));
+  }
+
+  @Test
+  public void verifyRedCityProductionSetToArcher(){
+    assertThat(game, is(notNullValue()));
+    game.changeProductionInCityAt(new Position(1,1),"archer");
+    assertThat(game.getCityAt(new Position(1,1)).getProduction(), is("archer"));
+  }
+
+  @Test
+  public void verifyRedCityProducesNewArcherInTwoTurns(){
+    assertThat(game, is(notNullValue()));
+    game.changeProductionInCityAt(new Position(1,1),"archer");
+    for(int i = 0; i < 2; i++)
+      game.endOfTurn();
+    assertThat(game.getUnitAt(new Position(1,1)).getTypeString(), is(GameConstants.ARCHER));
+    assertThat(game.getCityAt(new Position(1,1)).getTreasury(), is(2));
+  }
+  @Test
+  public void verifyBlueCityProducesNewLegionsInCLockWise(){
+    assertThat(game, is(notNullValue()));
+    game.changeProductionInCityAt(new Position(4,1),"legion");
+    for(int i = 0; i < 5; i++)
+      game.endOfTurn();
+    assertThat(game.getUnitAt(new Position(4,1)).getTypeString(), is(GameConstants.LEGION));
+    assertThat(game.getUnitAt(new Position(4,0)).getTypeString(), is(GameConstants.LEGION));
+  }
+
   /** REMOVE ME. Not a test of HotCiv, just an example of what
    matchers the hamcrest library has...
    @Test

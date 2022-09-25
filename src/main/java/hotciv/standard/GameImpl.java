@@ -131,12 +131,14 @@ public class GameImpl implements Game {
   }
   public void endOfTurn() {
     currentAge = currentAge + 100;
+    //Changes player each turn
     if(currentPlayer==Player.BLUE){
       currentPlayer = Player.RED;
     }
     else{
       currentPlayer = Player.BLUE;
     }
+    //Resets move count for every unit
     for (int i=0;i<GameConstants.WORLDSIZE;i++)
     {
       for(int j=0;j<GameConstants.WORLDSIZE;j++){
@@ -145,8 +147,76 @@ public class GameImpl implements Game {
         }
       }
     }
+    //Incriments production for each city and produces any units if treasury is sufficient
+    for (int i=0;i<GameConstants.WORLDSIZE;i++)
+    {
+      for(int j=0;j<GameConstants.WORLDSIZE;j++){
+        if(cityMap.get(new Position(i,j))!=null){
+          cityMap.get(new Position(i,j)).setTreasury(6);
+        }
+      }
+    }
+
+    //Checks production for all cities and produces the unit if treasury is sufficient
+    for (int i=0;i<GameConstants.WORLDSIZE;i++)
+    {
+      for(int j=0;j<GameConstants.WORLDSIZE;j++){
+        if(cityMap.get(new Position(i,j))!=null){
+          boolean newUnit = false;
+          //Switch case to check if treasury > cost of unit
+          switch(cityMap.get(new Position(i,j)).getProduction()){
+            case "archer":
+              if(cityMap.get(new Position(i,j)).getTreasury()>=10)
+                cityMap.get(new Position(i,j)).setTreasury(-10);
+                newUnit=true;
+              break;
+            case "legion":
+              if(cityMap.get(new Position(i,j)).getTreasury()>=15)
+                cityMap.get(new Position(i,j)).setTreasury(-15);
+                newUnit=true;
+              break;
+            case "settler":
+              if(cityMap.get(new Position(i,j)).getTreasury()>=30)
+                cityMap.get(new Position(i,j)).setTreasury(-30);
+                newUnit=true;
+              break;
+            case "":
+              break;
+          }
+          //If treasury > cost of unit, remove cost from treasury and produce unit in the first available tile
+          if(newUnit){
+
+            /**
+             * NOTE: There is definitely a cleaner way to do this by implementing an algorithm
+             */
+            if(unitMap.get(new Position(i,j))==null)
+              unitMap.put(new Position(i,j),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
+            else if(unitMap.get(new Position(i,j-1))==null)
+              unitMap.put(new Position(i,j-1),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
+            else if(unitMap.get(new Position(i+1,j-1))==null)
+              unitMap.put(new Position(i+1,j-1),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
+            else if(unitMap.get(new Position(i+1,j))==null)
+              unitMap.put(new Position(i+1,j),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
+            else if(unitMap.get(new Position(i+1,j+1))==null)
+              unitMap.put(new Position(i+1,j+1),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
+            else if(unitMap.get(new Position(i,j+1))==null)
+              unitMap.put(new Position(i,j+1),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
+            else if(unitMap.get(new Position(i-1,j+1))==null)
+              unitMap.put(new Position(i-1,j+1),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
+            else if(unitMap.get(new Position(i-1,j))==null)
+              unitMap.put(new Position(i-1,j),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
+            else if(unitMap.get(new Position(i-1,j-1))==null)
+              unitMap.put(new Position(i-1,j-1),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
+          }
+        }
+      }
+    }
   }
   public void changeWorkForceFocusInCityAt( Position p, String balance ) {}
-  public void changeProductionInCityAt( Position p, String unitType ) {}
+  public void changeProductionInCityAt( Position p, String unitType ) {
+    //Sets city's production if a valid unit
+    if(unitType=="archer"|unitType=="legion"|unitType=="settler")
+      cityMap.get(p).setProduction(unitType);
+  }
   public void performUnitActionAt( Position p ) {}
 }
