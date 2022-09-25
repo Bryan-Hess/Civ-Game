@@ -162,7 +162,7 @@ public class TestAlphaCiv {
   }
 
   @Test
-  public void verifySuccessfulMove(){
+  public void verifyUnitSuccessfullyMovesTHISISABUG(){
     assertThat(game, is(notNullValue()));
     assertThat(game.getPlayerInTurn(), is(Player.RED));
     assertThat(game.moveUnit(new Position(2,0),new Position(2,1)),is(true));
