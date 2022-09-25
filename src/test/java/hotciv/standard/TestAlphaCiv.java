@@ -117,22 +117,25 @@ public class TestAlphaCiv {
     }
   }
   @Test
-  public void verifyWinner(){
+  public void verifyWinnerIsRedAtThreeThousandBC(){
     assertThat(game, is(notNullValue()));
     assertThat(game.getWinner(), is(nullValue()));
     for(int i = 0; i < 10; i++)
       game.endOfTurn();
+    assertThat(game.getAge(), is(-3000));
     assertThat(game.getWinner(), is(Player.RED));
   }
 
   @Test
-  public void verifyCitySize() {
+  public void verifyCitySizeIs1() {
+    assertThat(game, is(notNullValue()));
     assertThat(game.getCityAt(new Position(1,1)).getSize(), is(1));
     assertThat(game.getCityAt(new Position(4,1)).getSize(), is(1));
   }
 
   @Test
-  public void verifyTreasurySize() {
+  public void verifyTreasurySizeIs0() {
+    assertThat(game, is(notNullValue()));
     assertThat(game.getCityAt(new Position(1,1)).getTreasury(), is(0));
     assertThat(game.getCityAt(new Position(4,1)).getTreasury(), is(0));
   }
@@ -177,7 +180,7 @@ public class TestAlphaCiv {
     assertThat(game.getUnitAt(new Position(4,3)), is(nullValue()));
   }
   @Test
-  public void verifyTreasuryIncriment(){
+  public void verifyTreasuryIncrementsBy6EachTurn(){
     assertThat(game, is(notNullValue()));
     for(int i = 0; i < 5; i++)
       game.endOfTurn();
