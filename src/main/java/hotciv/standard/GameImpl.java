@@ -100,7 +100,7 @@ public class GameImpl implements Game {
       return false;
     }
 
-    if(tileMap.get(to).getTypeString() == GameConstants.OCEANS || tileMap.get(to).getTypeString() == GameConstants.MOUNTAINS ){
+    if(tileMap.get(to).getTypeString().equals(GameConstants.OCEANS) || tileMap.get(to).getTypeString().equals(GameConstants.MOUNTAINS)){
       return false;
     }
 
@@ -147,7 +147,7 @@ public class GameImpl implements Game {
         }
       }
     }
-    //Incriments production for each city and produces any units if treasury is sufficient
+    //Increments production for each city and produces any units if treasury is sufficient
     for (int i=0;i<GameConstants.WORLDSIZE;i++)
     {
       for(int j=0;j<GameConstants.WORLDSIZE;j++){
@@ -165,20 +165,23 @@ public class GameImpl implements Game {
           boolean newUnit = false;
           //Switch case to check if treasury > cost of unit
           switch(cityMap.get(new Position(i,j)).getProduction()){
-            case "archer":
-              if(cityMap.get(new Position(i,j)).getTreasury()>=10)
-                cityMap.get(new Position(i,j)).setTreasury(-10);
-                newUnit=true;
+            case GameConstants.ARCHER:
+              if(cityMap.get(new Position(i,j)).getTreasury()>=10) {
+                cityMap.get(new Position(i, j)).setTreasury(-10);
+                newUnit = true;
+              }
               break;
-            case "legion":
-              if(cityMap.get(new Position(i,j)).getTreasury()>=15)
-                cityMap.get(new Position(i,j)).setTreasury(-15);
-                newUnit=true;
+            case GameConstants.LEGION:
+              if(cityMap.get(new Position(i,j)).getTreasury()>=15) {
+                cityMap.get(new Position(i, j)).setTreasury(-15);
+                newUnit = true;
+              }
               break;
-            case "settler":
-              if(cityMap.get(new Position(i,j)).getTreasury()>=30)
-                cityMap.get(new Position(i,j)).setTreasury(-30);
-                newUnit=true;
+            case GameConstants.SETTLER:
+              if(cityMap.get(new Position(i,j)).getTreasury()>=30) {
+                cityMap.get(new Position(i, j)).setTreasury(-30);
+                newUnit = true;
+              }
               break;
             case "":
               break;
@@ -186,9 +189,8 @@ public class GameImpl implements Game {
           //If treasury > cost of unit, remove cost from treasury and produce unit in the first available tile
           if(newUnit){
 
-            /**
-             * NOTE: There is definitely a cleaner way to do this by implementing an algorithm
-             */
+            //NOTE: There is definitely a cleaner way to do this by implementing an algorithm
+
             if(unitMap.get(new Position(i,j))==null)
               unitMap.put(new Position(i,j),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
             else if(unitMap.get(new Position(i,j-1))==null)
@@ -215,8 +217,9 @@ public class GameImpl implements Game {
   public void changeWorkForceFocusInCityAt( Position p, String balance ) {}
   public void changeProductionInCityAt( Position p, String unitType ) {
     //Sets city's production if a valid unit
-    if(unitType=="archer"|unitType=="legion"|unitType=="settler")
+    if(unitType.equals(GameConstants.ARCHER)|unitType.equals(GameConstants.LEGION)|unitType.equals(GameConstants.SETTLER)) {
       cityMap.get(p).setProduction(unitType);
+    }
   }
   public void performUnitActionAt( Position p ) {}
 }

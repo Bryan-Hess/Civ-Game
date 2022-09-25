@@ -191,14 +191,14 @@ public class TestAlphaCiv {
   @Test
   public void verifyRedCityProductionSetToArcher(){
     assertThat(game, is(notNullValue()));
-    game.changeProductionInCityAt(new Position(1,1),"archer");
-    assertThat(game.getCityAt(new Position(1,1)).getProduction(), is("archer"));
+    game.changeProductionInCityAt(new Position(1,1),GameConstants.ARCHER);
+    assertThat(game.getCityAt(new Position(1,1)).getProduction(), is(GameConstants.ARCHER));
   }
 
   @Test
   public void verifyRedCityProducesNewArcherInTwoTurns(){
     assertThat(game, is(notNullValue()));
-    game.changeProductionInCityAt(new Position(1,1),"archer");
+    game.changeProductionInCityAt(new Position(1,1),GameConstants.ARCHER);
     for(int i = 0; i < 2; i++)
       game.endOfTurn();
     assertThat(game.getUnitAt(new Position(1,1)).getTypeString(), is(GameConstants.ARCHER));
@@ -207,7 +207,7 @@ public class TestAlphaCiv {
   @Test
   public void verifyBlueCityProducesNewLegionsInClockwise(){
     assertThat(game, is(notNullValue()));
-    game.changeProductionInCityAt(new Position(4,1),"legion");
+    game.changeProductionInCityAt(new Position(4,1),GameConstants.LEGION);
     for(int i = 0; i < 5; i++)
       game.endOfTurn();
     assertThat(game.getUnitAt(new Position(4,1)).getTypeString(), is(GameConstants.LEGION));
