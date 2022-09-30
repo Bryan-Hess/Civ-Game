@@ -38,10 +38,32 @@ public class GameImpl implements Game {
   public Map<Position, Unit> unitMap;
   public Map<Position, City> cityMap;
   public Player currentPlayer;
-
   public int currentAge;
 
-  public GameImpl() {
+  WorldAgingImpl WorldAging;
+  DecideWinnerImpl decideWinner;
+  ArcherActionImpl archerAction;
+  SettlerActionImpl settlerAction;
+
+  WorldLayoutImpl worldLayout;
+
+  public void setWorldAgingVariation(String civVar){
+    WorldAging = new WorldAgingImpl(civVar);
+  }
+  public void setDecideWinnerVariation(String civVar){
+    decideWinner = new DecideWinnerImpl(civVar);
+  }
+  public void setArcherActionVariation(String civVar){
+    archerAction = new ArcherActionImpl(civVar);
+  }
+  public void setSettlerActionVariation(String civVar){
+    settlerAction = new SettlerActionImpl(civVar);
+  }
+  public void setWorldLayoutVariation(String civVar){
+    worldLayout = new WorldLayoutImpl(civVar);
+  }
+
+  public GameImpl(){
     // Create a hashMap of all the tiles. A tile can be called by using its Position.
     // Each tile is type Plains as default, except for tiles (1,0),(0,1), and (2,2), which are Oceans, Hills, and Mountains, respectively.
 
@@ -81,7 +103,7 @@ public class GameImpl implements Game {
     return currentPlayer;
   }
   public Player getWinner() {
-    if(currentAge==-3000)
+    if(currentAge >= -3000)
       return Player.RED;
     else
       return null;
