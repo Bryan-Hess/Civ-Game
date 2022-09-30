@@ -152,7 +152,7 @@ public class GameImpl implements Game {
 
   }
   public void endOfTurn() {
-    currentAge = currentAge + 100;
+    currentAge = WorldAging.incrementAge(currentAge);
     //Changes player each turn
     if(currentPlayer==Player.BLUE){
       currentPlayer = Player.RED;
