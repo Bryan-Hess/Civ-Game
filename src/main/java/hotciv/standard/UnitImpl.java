@@ -8,12 +8,13 @@ public class UnitImpl implements Unit {
     private Player owner;
     private String type;
 
+    private int moveCount;
     private int attackStrength;
     private int defenseStrength;
     public UnitImpl(Player name, String unitType){
         owner = name;
         type = unitType;
-
+        moveCount = 1;
     }
     @Override
     public String getTypeString() {
@@ -27,7 +28,7 @@ public class UnitImpl implements Unit {
 
     @Override
     public int getMoveCount() {
-        return 0;
+        return moveCount;
     }
 
     @Override
@@ -39,4 +40,15 @@ public class UnitImpl implements Unit {
     public int getAttackingStrength() {
         return attackStrength;
     }
+
+    public void resetMoveCount() {
+        moveCount = 1;
+    }
+
+    public void countMove(){
+        moveCount = moveCount - 1;
+    }
+
 }
+
+

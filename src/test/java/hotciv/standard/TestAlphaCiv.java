@@ -117,24 +117,101 @@ public class TestAlphaCiv {
     }
   }
   @Test
-  public void verifyWinner(){
+  public void verifyWinnerIsRedAtThreeThousandBC(){
     assertThat(game, is(notNullValue()));
     assertThat(game.getWinner(), is(nullValue()));
     for(int i = 0; i < 10; i++)
       game.endOfTurn();
+    assertThat(game.getAge(), is(-3000));
     assertThat(game.getWinner(), is(Player.RED));
   }
 
   @Test
-  public void verifyCitySize() {
+  public void verifyCitySizeIsOne() {
+    assertThat(game, is(notNullValue()));
     assertThat(game.getCityAt(new Position(1,1)).getSize(), is(1));
     assertThat(game.getCityAt(new Position(4,1)).getSize(), is(1));
   }
 
   @Test
-  public void verifyTreasurySize() {
+  public void verifyTreasurySizeIsZero() {
+    assertThat(game, is(notNullValue()));
     assertThat(game.getCityAt(new Position(1,1)).getTreasury(), is(0));
     assertThat(game.getCityAt(new Position(4,1)).getTreasury(), is(0));
+  }
+  @Test
+  public void verifyUnitCannotBeMovedByWrongPlayer(){
+    assertThat(game, is(notNullValue()));
+    assertThat(game.getPlayerInTurn(), is(Player.RED));
+    assertThat(game.moveUnit(new Position(3,2),new Position(4,2)),is(false));
+  }
+
+  @Test
+  public void verifyUnitCannotMoveOnWrongTerrains(){
+    assertThat(game, is(notNullValue()));
+    assertThat(game.getPlayerInTurn(), is(Player.RED));
+    assertThat(game.moveUnit(new Position(2,0),new Position(1,0)),is(false));
+  }
+
+  @Test
+  public void verifyUnitCannotMoveTooFar(){
+    assertThat(game, is(notNullValue()));
+    assertThat(game.getPlayerInTurn(), is(Player.RED));
+    assertThat(game.moveUnit(new Position(2,0),new Position(4,0)),is(false));
+    assertThat(game.moveUnit(new Position(2,0),new Position(2,6)),is(false));
+  }
+
+  @Test
+  public void verifyUnitSuccessfullyMovesOneTile(){
+    assertThat(game, is(notNullValue()));
+    assertThat(game.getPlayerInTurn(), is(Player.RED));
+    assertThat(game.moveUnit(new Position(2,0),new Position(2,1)),is(true));
+    assertThat(game.getUnitAt(new Position(2,1)).getTypeString(), is(GameConstants.ARCHER));
+    assertThat(game.getUnitAt(new Position(2,1)).getOwner(), is(Player.RED));
+    assertThat(game.getUnitAt(new Position(2,0)), is(nullValue()));
+  }
+  @Test
+  public void verifyRedSuccessfullyAttacksBlue(){
+    assertThat(game, is(notNullValue()));
+    assertThat(game.getPlayerInTurn(), is(Player.RED));
+    assertThat(game.moveUnit(new Position(4,3),new Position(3,2)),is(true));
+    assertThat(game.getUnitAt(new Position(3,2)).getTypeString(), is(GameConstants.SETTLER));
+    assertThat(game.getUnitAt(new Position(3,2)).getOwner(), is(Player.RED));
+    assertThat(game.getUnitAt(new Position(4,3)), is(nullValue()));
+  }
+  @Test
+  public void verifyTreasuryIncrementsBySixEachTurn(){
+    assertThat(game, is(notNullValue()));
+    for(int i = 0; i < 5; i++)
+      game.endOfTurn();
+    assertThat(game.getCityAt(new Position(1,1)).getTreasury(), is(30));
+    assertThat(game.getCityAt(new Position(4,1)).getTreasury(), is(30));
+  }
+
+  @Test
+  public void verifyRedCityProductionSetToArcher(){
+    assertThat(game, is(notNullValue()));
+    game.changeProductionInCityAt(new Position(1,1),GameConstants.ARCHER);
+    assertThat(game.getCityAt(new Position(1,1)).getProduction(), is(GameConstants.ARCHER));
+  }
+
+  @Test
+  public void verifyRedCityProducesNewArcherInTwoTurns(){
+    assertThat(game, is(notNullValue()));
+    game.changeProductionInCityAt(new Position(1,1),GameConstants.ARCHER);
+    for(int i = 0; i < 2; i++)
+      game.endOfTurn();
+    assertThat(game.getUnitAt(new Position(1,1)).getTypeString(), is(GameConstants.ARCHER));
+    assertThat(game.getCityAt(new Position(1,1)).getTreasury(), is(2));
+  }
+  @Test
+  public void verifyBlueCityProducesNewLegionsInClockwise(){
+    assertThat(game, is(notNullValue()));
+    game.changeProductionInCityAt(new Position(4,1),GameConstants.LEGION);
+    for(int i = 0; i < 5; i++)
+      game.endOfTurn();
+    assertThat(game.getUnitAt(new Position(4,1)).getTypeString(), is(GameConstants.LEGION));
+    assertThat(game.getUnitAt(new Position(4,0)).getTypeString(), is(GameConstants.LEGION));
   }
 
   /** REMOVE ME. Not a test of HotCiv, just an example of what

@@ -63,4 +63,16 @@ public interface Unit {
    * @return attack strength
    */
   public int getAttackingStrength();
+
+  /** resets the unit's remaining move count. Necessary so that they can move next turn
+   * no param
+   * no return
+   */
+  public void resetMoveCount();
+
+  /** decreases the unit's move count by one.
+   * no param
+   * no return
+   */
+  public void countMove();
 }
