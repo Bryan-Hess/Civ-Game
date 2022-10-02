@@ -34,9 +34,9 @@ import java.util.Map;
 
 public class GameImpl implements Game {
 
-  public Map<Position, Tile> tileMap;
-  public Map<Position, Unit> unitMap;
-  public Map<Position, City> cityMap;
+ // public Map<Position, Tile> tileMap;
+ // public Map<Position, Unit> unitMap;
+//  public Map<Position, City> cityMap;
   public Player currentPlayer;
   public int currentAge;
 
@@ -61,43 +61,33 @@ public class GameImpl implements Game {
   }
   public void setWorldLayoutVariation(String civVar){
     worldLayout = new WorldLayoutImpl(civVar);
+    worldLayout.implementWorldLayout();
   }
 
-  public GameImpl(){
+  public GameImpl( String civVar){
     // Create a hashMap of all the tiles. A tile can be called by using its Position.
     // Each tile is type Plains as default, except for tiles (1,0),(0,1), and (2,2), which are Oceans, Hills, and Mountains, respectively.
+    setWorldLayoutVariation(civVar);
 
-    tileMap = new HashMap<>();
-    unitMap = new HashMap<>();
-    cityMap = new HashMap<>();
-    for(int i = 0; i<GameConstants.WORLDSIZE;i++){
-      for(int j = 0; j<GameConstants.WORLDSIZE;j++){
-        tileMap.put(new Position(i,j),new TileImpl(GameConstants.PLAINS));
-      }
-    }
-    tileMap.put(new Position(1,0),new TileImpl(GameConstants.OCEANS));
-    tileMap.put(new Position(0,1),new TileImpl(GameConstants.HILLS));
-    tileMap.put(new Position(2,2),new TileImpl(GameConstants.MOUNTAINS));
+    setWorldAgingVariation(civVar);
+    setDecideWinnerVariation(civVar);
+    setArcherActionVariation(civVar);
+    setSettlerActionVariation(civVar);
 
-    unitMap.put(new Position(2,0),new UnitImpl(Player.RED,GameConstants.ARCHER));
-    unitMap.put(new Position(3,2),new UnitImpl(Player.BLUE,GameConstants.LEGION));
-    unitMap.put(new Position(4,3),new UnitImpl(Player.RED,GameConstants.SETTLER));
 
-    cityMap.put(new Position(1,1),new CityImpl(Player.RED));
-    cityMap.put(new Position(4, 1), new CityImpl(Player.BLUE));
 
     currentPlayer = Player.RED;
     currentAge = -4000;
   }
 
   public Tile getTileAt( Position p ) {
-    return tileMap.get(p);
+    return worldLayout.getTileAt(p);
   }
   public Unit getUnitAt( Position p ) {
-    return unitMap.get(p);
+    return worldLayout.getUnitAt(p);
   }
   public City getCityAt( Position p ) {
-    return cityMap.get(p);
+    return worldLayout.getCityAt(p);
   }
   public Player getPlayerInTurn() {
     return currentPlayer;
@@ -118,36 +108,38 @@ public class GameImpl implements Game {
     newR = to.getRow();
     newC = to.getColumn();
 
-    if(unitMap.get(from).getOwner() != currentPlayer){
+    if(worldLayout.getUnitAt(from).getOwner() != currentPlayer){
       return false;
     }
 
-    if(tileMap.get(to).getTypeString().equals(GameConstants.OCEANS) || tileMap.get(to).getTypeString().equals(GameConstants.MOUNTAINS)){
+    if(worldLayout.getTileAt(to).getTypeString().equals(GameConstants.OCEANS) || worldLayout.getTileAt(to).getTypeString().equals(GameConstants.MOUNTAINS)){
       return false;
     }
 
     if(java.lang.Math.abs(newR-oldR)>1 || java.lang.Math.abs(newC-oldC)>1){
       return false;
     }
-    if(unitMap.get(to)!=null){
-      if(currentPlayer==unitMap.get(to).getOwner()){
+    if(worldLayout.getUnitAt(to)!=null){
+      if(currentPlayer.equals(worldLayout.getUnitAt(to).getOwner())){
         return false; //if the player tries to move their unit on a tile that already has one of their units
       }
       else{
         //In future iterations, we will compare attacking/defending strength.
         //For this iteration, we do not need to compare stats, because the attacker always wins
-        unitMap.remove(to);
-        unitMap.put(to,unitMap.get(from));
-        unitMap.remove(from);
-        unitMap.get(to).countMove();
+        worldLayout.removeUnitAt(to);
+          worldLayout.moveUnitTo(to,from);
+       // unitMap.remove(from);
+        worldLayout.removeUnitAt(from);
+        worldLayout.getUnitAt(to).countMove();
         return true;
       }
     }
     else{
 
-      unitMap.put(to,unitMap.get(from));
-      unitMap.remove(from);
-      unitMap.get(to).countMove();
+      worldLayout.moveUnitTo(to,from);
+      // unitMap.remove(from);
+      worldLayout.removeUnitAt(from);
+      worldLayout.getUnitAt(to).countMove();
       return true;}
 
   }
@@ -164,8 +156,8 @@ public class GameImpl implements Game {
     for (int i=0;i<GameConstants.WORLDSIZE;i++)
     {
       for(int j=0;j<GameConstants.WORLDSIZE;j++){
-        if(unitMap.get(new Position(i,j))!=null){
-          unitMap.get(new Position(i,j)).resetMoveCount();
+        if(worldLayout.getUnitAt(new Position(i,j))!=null){
+          worldLayout.getUnitAt(new Position(i,j)).resetMoveCount();
         }
       }
     }
@@ -173,8 +165,8 @@ public class GameImpl implements Game {
     for (int i=0;i<GameConstants.WORLDSIZE;i++)
     {
       for(int j=0;j<GameConstants.WORLDSIZE;j++){
-        if(cityMap.get(new Position(i,j))!=null){
-          cityMap.get(new Position(i,j)).setTreasury(6);
+        if(worldLayout.getCityAt(new Position(i,j))!=null){
+          worldLayout.getCityAt(new Position(i,j)).setTreasury(6);
         }
       }
     }
@@ -183,25 +175,25 @@ public class GameImpl implements Game {
     for (int i=0;i<GameConstants.WORLDSIZE;i++)
     {
       for(int j=0;j<GameConstants.WORLDSIZE;j++){
-        if(cityMap.get(new Position(i,j))!=null){
+        if(worldLayout.getCityAt(new Position(i,j))!=null){
           boolean newUnit = false;
           //Switch case to check if treasury > cost of unit
-          switch(cityMap.get(new Position(i,j)).getProduction()){
+          switch(worldLayout.getCityAt(new Position(i,j)).getProduction()){
             case GameConstants.ARCHER:
-              if(cityMap.get(new Position(i,j)).getTreasury()>=10) {
-                cityMap.get(new Position(i, j)).setTreasury(-10);
+              if(worldLayout.getCityAt(new Position(i,j)).getTreasury()>=10) {
+                worldLayout.getCityAt(new Position(i,j)).setTreasury(-10);
                 newUnit = true;
               }
               break;
             case GameConstants.LEGION:
-              if(cityMap.get(new Position(i,j)).getTreasury()>=15) {
-                cityMap.get(new Position(i, j)).setTreasury(-15);
+              if(worldLayout.getCityAt(new Position(i,j)).getTreasury()>=15) {
+                worldLayout.getCityAt(new Position(i,j)).setTreasury(-15);
                 newUnit = true;
               }
               break;
             case GameConstants.SETTLER:
-              if(cityMap.get(new Position(i,j)).getTreasury()>=30) {
-                cityMap.get(new Position(i, j)).setTreasury(-30);
+              if(worldLayout.getCityAt(new Position(i,j)).getTreasury()>=30) {
+                worldLayout.getCityAt(new Position(i,j)).setTreasury(-30);
                 newUnit = true;
               }
               break;
@@ -213,24 +205,24 @@ public class GameImpl implements Game {
 
             //NOTE: There is definitely a cleaner way to do this by implementing an algorithm
 
-            if(unitMap.get(new Position(i,j))==null)
-              unitMap.put(new Position(i,j),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
-            else if(unitMap.get(new Position(i,j-1))==null)
-              unitMap.put(new Position(i,j-1),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
-            else if(unitMap.get(new Position(i+1,j-1))==null)
-              unitMap.put(new Position(i+1,j-1),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
-            else if(unitMap.get(new Position(i+1,j))==null)
-              unitMap.put(new Position(i+1,j),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
-            else if(unitMap.get(new Position(i+1,j+1))==null)
-              unitMap.put(new Position(i+1,j+1),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
-            else if(unitMap.get(new Position(i,j+1))==null)
-              unitMap.put(new Position(i,j+1),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
-            else if(unitMap.get(new Position(i-1,j+1))==null)
-              unitMap.put(new Position(i-1,j+1),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
-            else if(unitMap.get(new Position(i-1,j))==null)
-              unitMap.put(new Position(i-1,j),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
-            else if(unitMap.get(new Position(i-1,j-1))==null)
-              unitMap.put(new Position(i-1,j-1),new UnitImpl(cityMap.get(new Position(i,j)).getOwner(),cityMap.get(new Position(i,j)).getProduction()));
+            if(worldLayout.getUnitAt(new Position(i,j))==null)
+              worldLayout.addUnit(new Position(i,j),new UnitImpl(worldLayout.getCityAt(new Position(i,j)).getOwner(),worldLayout.getCityAt(new Position(i,j)).getProduction()));
+            else if(worldLayout.getUnitAt(new Position(i,j-1))==null)
+                worldLayout.addUnit(new Position(i,j-1),new UnitImpl(worldLayout.getCityAt(new Position(i,j)).getOwner(),worldLayout.getCityAt(new Position(i,j)).getProduction()));
+            else if(worldLayout.getUnitAt(new Position(i+1,j-1))==null)
+                worldLayout.addUnit(new Position(i+1,j-1),new UnitImpl(worldLayout.getCityAt(new Position(i,j)).getOwner(),worldLayout.getCityAt(new Position(i,j)).getProduction()));
+            else if(worldLayout.getUnitAt(new Position(i+1,j))==null)
+                worldLayout.addUnit(new Position(i+1,j),new UnitImpl(worldLayout.getCityAt(new Position(i,j)).getOwner(),worldLayout.getCityAt(new Position(i,j)).getProduction()));
+            else if(worldLayout.getUnitAt(new Position(i+1,j+1))==null)
+                worldLayout.addUnit(new Position(i+1,j+1),new UnitImpl(worldLayout.getCityAt(new Position(i,j)).getOwner(),worldLayout.getCityAt(new Position(i,j)).getProduction()));
+            else if(worldLayout.getUnitAt(new Position(i,j+1))==null)
+                worldLayout.addUnit(new Position(i,j+1),new UnitImpl(worldLayout.getCityAt(new Position(i,j)).getOwner(),worldLayout.getCityAt(new Position(i,j)).getProduction()));
+            else if(worldLayout.getUnitAt(new Position(i-1,j+1))==null)
+                worldLayout.addUnit(new Position(i-1,j+1),new UnitImpl(worldLayout.getCityAt(new Position(i,j)).getOwner(),worldLayout.getCityAt(new Position(i,j)).getProduction()));
+            else if(worldLayout.getUnitAt(new Position(i-1,j))==null)
+                worldLayout.addUnit(new Position(i-1,j),new UnitImpl(worldLayout.getCityAt(new Position(i,j)).getOwner(),worldLayout.getCityAt(new Position(i,j)).getProduction()));
+            else if(worldLayout.getUnitAt(new Position(i-1,j-1))==null)
+                worldLayout.addUnit(new Position(i-1,j-1),new UnitImpl(worldLayout.getCityAt(new Position(i,j)).getOwner(),worldLayout.getCityAt(new Position(i,j)).getProduction()));
           }
         }
       }
@@ -240,8 +232,15 @@ public class GameImpl implements Game {
   public void changeProductionInCityAt( Position p, String unitType ) {
     //Sets city's production if a valid unit
     if(unitType.equals(GameConstants.ARCHER)|unitType.equals(GameConstants.LEGION)|unitType.equals(GameConstants.SETTLER)) {
-      cityMap.get(p).setProduction(unitType);
+      worldLayout.getCityAt(p).setProduction(unitType);
     }
   }
-  public void performUnitActionAt( Position p ) {}
-}
+  public void performUnitActionAt( Position p ) {
+
+    if(worldLayout.getUnitAt(p).getTypeString().equals(GameConstants.SETTLER)) {
+          settlerAction.buildCity(p, worldLayout);
+
+    }
+    }
+  }
+

@@ -1,6 +1,6 @@
 package hotciv.standard;
 
-import hotciv.framework.SettlerAction;
+import hotciv.framework.*;
 
 public class SettlerActionImpl implements SettlerAction {
 
@@ -10,7 +10,16 @@ public class SettlerActionImpl implements SettlerAction {
         civVariation = civVariationIN;
     }
 
-    public void buildCity() {
+    public void buildCity(Position p, WorldLayout worldLayout) {
+
+        if (civVariation.equals(GameConstants.GAMMACIV)){
+            Player tempOwner = worldLayout.getUnitAt(p).getOwner();
+            worldLayout.removeUnitAt(p);
+            worldLayout.addCityAt(p, tempOwner);
+        }
+        else{
+            //do nothing
+        }
 
     }
 }

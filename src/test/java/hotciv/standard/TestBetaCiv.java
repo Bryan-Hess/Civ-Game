@@ -12,9 +12,9 @@ public class TestBetaCiv {
 
     @Before
     public void setUp() {
-        game = new GameImpl();
-        ((GameImpl)game).setWorldAgingVariation(GameConstants.BETACIV);
-        ((GameImpl)game).setDecideWinnerVariation(GameConstants.BETACIV);
+        game = new GameImpl(GameConstants.BETACIV);
+       // ((GameImpl)game).setWorldAgingVariation(GameConstants.BETACIV);
+       // ((GameImpl)game).setDecideWinnerVariation(GameConstants.BETACIV);
     }
 
     @Test

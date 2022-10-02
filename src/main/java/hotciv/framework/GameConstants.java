@@ -46,6 +46,7 @@ public class GameConstants {
   public static final String productionFocus = "hammer";
   public static final String foodFocus = "apple";
   //Valid civ variants
+  public static final String ALPHACIV = "alphaCiv";
   public static final String BETACIV = "betaCiv";
   public static final String GAMMACIV = "gammaCiv";
   public static final String DELTACIV = "deltaCiv";
