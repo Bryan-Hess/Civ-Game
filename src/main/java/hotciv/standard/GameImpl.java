@@ -107,19 +107,20 @@ public class GameImpl implements Game {
     oldC = from.getColumn();
     newR = to.getRow();
     newC = to.getColumn();
-
+    //If trying to move a unit not owned by the player
     if(worldLayout.getUnitAt(from).getOwner() != currentPlayer){
       return false;
     }
-
+    //if trying to move onto an ocean or mountain tile
     if(worldLayout.getTileAt(to).getTypeString().equals(GameConstants.OCEANS) || worldLayout.getTileAt(to).getTypeString().equals(GameConstants.MOUNTAINS)){
       return false;
     }
-
+    //If trying to move an invalid distance
     if(java.lang.Math.abs(newR-oldR)>1 || java.lang.Math.abs(newC-oldC)>1){
       return false;
     }
-    if(worldLayout.getUnitAt(to)!=null){
+
+    if(worldLayout.getUnitAt(to)!=null&&worldLayout.getUnitAt(from).getMoveCount()>0){
       if(currentPlayer.equals(worldLayout.getUnitAt(to).getOwner())){
         return false; //if the player tries to move their unit on a tile that already has one of their units
       }
@@ -127,20 +128,37 @@ public class GameImpl implements Game {
         //In future iterations, we will compare attacking/defending strength.
         //For this iteration, we do not need to compare stats, because the attacker always wins
         worldLayout.removeUnitAt(to);
-          worldLayout.moveUnitTo(to,from);
+        worldLayout.moveUnitTo(to,from);
        // unitMap.remove(from);
         worldLayout.removeUnitAt(from);
         worldLayout.getUnitAt(to).countMove();
         return true;
       }
-    }
-    else{
+    } else if (worldLayout.getCityAt(to)!=null&&worldLayout.getUnitAt(from).getMoveCount()>0) { //If unit moving onto a city
+        if(!currentPlayer.equals(worldLayout.getCityAt(to).getOwner())) { //If unit moves to enemy city, take the city
+            worldLayout.moveUnitTo(to, from);
+            // unitMap.remove(from);
+            worldLayout.removeUnitAt(from);
+            worldLayout.getUnitAt(to).countMove();
+
+            //Removes the city and places a new one, if requirements change down the line will need to add setter/getter for city ownership to cityImpl
+            worldLayout.removeCityAt(to);
+            worldLayout.addCityAt(to, currentPlayer);
+        }else{
+            worldLayout.moveUnitTo(to, from);
+            // unitMap.remove(from);
+            worldLayout.removeUnitAt(from);
+            worldLayout.getUnitAt(to).countMove();
+        }
+    } else if(worldLayout.getUnitAt(from).getMoveCount()>0){
 
       worldLayout.moveUnitTo(to,from);
       // unitMap.remove(from);
       worldLayout.removeUnitAt(from);
       worldLayout.getUnitAt(to).countMove();
-      return true;}
+      return true;
+    }
+    return false;
 
   }
   public void endOfTurn() {

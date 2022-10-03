@@ -57,7 +57,18 @@ public class TestBetaCiv {
         assertThat(game.getAge(), is(1972));
     }
 
-    public void setDecideWinnerVariation(){
-
+    public void verifyWinnerBlueifRedTakesAllCities(){
+        assertThat(game, is(notNullValue()));
+        assertThat(game.getWinner(), is(nullValue()));
+        assertThat(game.moveUnit(new Position(2,0),(new Position(2,1))), is(true));
+        game.endOfTurn();
+        game.endOfTurn();
+        assertThat(game, is(notNullValue()));
+        assertThat(game.moveUnit(new Position(2,1),(new Position(3,1))), is(true));
+        game.endOfTurn();
+        game.endOfTurn();
+        assertThat(game, is(notNullValue()));
+        assertThat(game.moveUnit(new Position(3,1),(new Position(4,1))), is(true));
+        assertThat(game.getWinner(), is(Player.RED));
     }
 }

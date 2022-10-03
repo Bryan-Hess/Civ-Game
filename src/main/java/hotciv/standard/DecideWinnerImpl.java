@@ -16,12 +16,14 @@ public class DecideWinnerImpl implements DecideWinner{
     public Player getWinner(int currentAge, List<CityImpl> cities) {
         if(civVariation.equals(GameConstants.BETACIV)){
             for(CityImpl s:cities){
-                //if (!s.equals(cities.get(0).getOwner()))
+                if (!s.getOwner().equals(cities.get(0).getOwner()))
+                    return null;
+                else
+                    return cities.get(0).getOwner();
             }
+            return null;
 
 
-
-            return Player.BLUE;
         } else if(civVariation.equals(GameConstants.ALPHACIV)){
             if(currentAge >= -3000) {
                 return Player.RED;

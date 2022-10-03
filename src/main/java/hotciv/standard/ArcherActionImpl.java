@@ -15,6 +15,7 @@ public class ArcherActionImpl implements ArcherAction {
             if(worldLayout.getUnitAt(p).getkeepMoveToZero()==false) { //Doubles defensive strength and immobilizes unit if unit is not fortified
                 worldLayout.getUnitAt(p).setDefensiveStrength(worldLayout.getUnitAt(p).getDefensiveStrength() * 2);
                 worldLayout.getUnitAt(p).setkeepMoveToZero(true);
+                worldLayout.getUnitAt(p).countMove();
             }else{ //Halves defensive strength and re-mobilizes the unit if fortified
                 worldLayout.getUnitAt(p).setDefensiveStrength(worldLayout.getUnitAt(p).getDefensiveStrength() / 2);
                 worldLayout.getUnitAt(p).setkeepMoveToZero(false);

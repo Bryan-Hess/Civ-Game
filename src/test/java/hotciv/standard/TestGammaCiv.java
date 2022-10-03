@@ -31,13 +31,19 @@ public class TestGammaCiv {
 
     @Test
     public void testArcherAction(){
-        //assertThat(game, is(notNullValue()));
-        //assertThat(game.getUnitAt(new Position(2,0)).getTypeString(), is(GameConstants.ARCHER));
-        //assertThat(game.getUnitAt(new Position(2,0)).getDefensiveStrength(), is(3));
-        //game.performUnitActionAt(new Position(2,0));
-        //assertThat(game.getUnitAt(new Position(2,0)).getDefensiveStrength(), is(6));
-        game.moveUnit(new Position(2,0),(new Position(3,0)));
-        //assertThat(game.getUnitAt(new Position(2,0)).getTypeString(), is(GameConstants.ARCHER));
-
+        assertThat(game, is(notNullValue()));
+        assertThat(game.getUnitAt(new Position(2,0)).getTypeString(), is(GameConstants.ARCHER));
+        assertThat(game.getUnitAt(new Position(2,0)).getDefensiveStrength(), is(3));
+        game.performUnitActionAt(new Position(2,0));
+        assertThat(game.getUnitAt(new Position(2,0)).getDefensiveStrength(), is(6));
+        game.endOfTurn();
+        game.endOfTurn();
+        assertThat(game.moveUnit(new Position(2,0),(new Position(3,0))), is(false));
+        assertThat(game.getUnitAt(new Position(2,0)).getTypeString(), is(GameConstants.ARCHER));
+        game.performUnitActionAt(new Position(2,0));
+        assertThat(game.getUnitAt(new Position(2,0)).getDefensiveStrength(), is(3));
+        game.endOfTurn();
+        game.endOfTurn();
+        assertThat(game.moveUnit(new Position(2,0),(new Position(3,0))), is(true));
     }
 }
