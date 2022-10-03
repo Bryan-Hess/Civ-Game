@@ -2,6 +2,8 @@ package hotciv.standard;
 
 import hotciv.framework.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +16,10 @@ public class WorldLayoutImpl implements WorldLayout {
     public Map<Position, Tile> tileMap = new HashMap<>();
     public Map<Position, Unit> unitMap = new HashMap<>();
     public Map<Position, City> cityMap = new HashMap<>();
+
+    public ArrayList<City> cityList = new ArrayList<>();
+
+
     public WorldLayoutImpl(String civVariationIN){
         civVariation = civVariationIN;
     }
@@ -43,6 +49,7 @@ public class WorldLayoutImpl implements WorldLayout {
                     };
             cityMap.put(new Position(8,12), new CityImpl(Player.RED));
             cityMap.put(new Position(4, 5), new CityImpl(Player.BLUE));
+
             unitMap.put(new Position(2,0),new UnitImpl(Player.RED,GameConstants.ARCHER));
             unitMap.put(new Position(3,2),new UnitImpl(Player.BLUE,GameConstants.LEGION));
             unitMap.put(new Position(4,3),new UnitImpl(Player.RED,GameConstants.SETTLER));
@@ -144,6 +151,11 @@ public class WorldLayoutImpl implements WorldLayout {
     public void moveUnitTo(Position to, Position from){
         if(unitMap.get(from).getMoveCount()>0) //Makes sure unit has remaining moves left in turn
             unitMap.put(to,unitMap.get(from));
+    }
+
+    public Collection<City> getCityList() {
+
+        return cityMap.values();
     }
 }
 

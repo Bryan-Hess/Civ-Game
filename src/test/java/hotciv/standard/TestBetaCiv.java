@@ -56,7 +56,7 @@ public class TestBetaCiv {
         game.endOfTurn();
         assertThat(game.getAge(), is(1972));
     }
-
+    @Test
     public void verifyWinnerBlueifRedTakesAllCities(){
         assertThat(game, is(notNullValue()));
         assertThat(game.getWinner(), is(nullValue()));

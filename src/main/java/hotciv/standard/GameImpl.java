@@ -93,10 +93,8 @@ public class GameImpl implements Game {
     return currentPlayer;
   }
   public Player getWinner() {
-    if(currentAge >= -3000)
-      return Player.RED;
-    else
-      return null;
+      return decideWinner.getWinner(currentAge,worldLayout);
+
   }
   public int getAge() {
     return currentAge;
@@ -144,6 +142,7 @@ public class GameImpl implements Game {
             //Removes the city and places a new one, if requirements change down the line will need to add setter/getter for city ownership to cityImpl
             worldLayout.removeCityAt(to);
             worldLayout.addCityAt(to, currentPlayer);
+            return true;
         }else{
             worldLayout.moveUnitTo(to, from);
             // unitMap.remove(from);
