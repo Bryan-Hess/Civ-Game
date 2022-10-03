@@ -238,9 +238,11 @@ public class GameImpl implements Game {
   public void performUnitActionAt( Position p ) {
 
     if(worldLayout.getUnitAt(p).getTypeString().equals(GameConstants.SETTLER)) {
-          settlerAction.buildCity(p, worldLayout);
-
+        settlerAction.buildCity(p, worldLayout);
+    } else if (worldLayout.getUnitAt(p).getTypeString().equals(GameConstants.ARCHER)) {
+        archerAction.fortify(p, worldLayout);
     }
+
     }
   }
 

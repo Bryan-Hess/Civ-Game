@@ -56,4 +56,8 @@ public class TestBetaCiv {
         game.endOfTurn();
         assertThat(game.getAge(), is(1972));
     }
+
+    public void setDecideWinnerVariation(){
+
+    }
 }

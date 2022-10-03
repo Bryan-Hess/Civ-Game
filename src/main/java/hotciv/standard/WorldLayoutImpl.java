@@ -142,8 +142,8 @@ public class WorldLayoutImpl implements WorldLayout {
 
     }
     public void moveUnitTo(Position to, Position from){
-
-        unitMap.put(to,unitMap.get(from));
+        if(unitMap.get(to).getMoveCount()>0) //Makes sure unit has remaining moves left in turn
+            unitMap.put(to,unitMap.get(from));
     }
 }
 
