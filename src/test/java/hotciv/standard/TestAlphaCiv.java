@@ -214,26 +214,37 @@ public class TestAlphaCiv {
     assertThat(game.getUnitAt(new Position(4,0)).getTypeString(), is(GameConstants.LEGION));
   }
 
-  /** REMOVE ME. Not a test of HotCiv, just an example of what
-   matchers the hamcrest library has...
-   @Test
-   public void shouldDefinetelyBeRemoved() {
-   // Matching null and not null values
-   // 'is' require an exact match
-   String s = null;
-   assertThat(s, is(nullValue()));
-   s = "Ok";
-   assertThat(s, is(notNullValue()));
-   assertThat(s, is("Ok"));
-   // If you only validate substrings, use containsString
-   assertThat("This is a dummy test", containsString("dummy"));
-   // Match contents of Lists
-   List<String> l = new ArrayList<String>();
-   l.add("Bimse");
-   l.add("Bumse");
-   // Note - ordering is ignored when matching using hasItems
-   assertThat(l, hasItems(new String[] {"Bumse","Bimse"}));
-   // Matchers may be combined, like is-not
-   assertThat(l.get(0), is(not("Bumse")));
-   }*/
+  //This tests a proper Settler action according to the Alpha Civ requirements
+  //Nothing happens
+  @Test
+  public void testSettlerAction(){
+
+    assertThat(game, is(notNullValue()));
+    assertThat(game.getUnitAt(new Position(4,3)).getTypeString(), is(GameConstants.SETTLER));
+    assertThat(game.getCityAt(new Position(4,3)), is(nullValue()));
+    game.performUnitActionAt(new Position(4,3));
+    assertThat(game.getUnitAt(new Position(4,3)).getTypeString(), is(GameConstants.SETTLER));
+    assertThat(game.getCityAt(new Position(4,3)), is(nullValue()));
+  }
+
+  //This tests a proper Archer action according to the Alpha Civ requirements
+  //nothing happens
+  @Test
+  public void testArcherAction(){
+    assertThat(game, is(notNullValue()));
+    assertThat(game.getUnitAt(new Position(2,0)).getTypeString(), is(GameConstants.ARCHER));
+    assertThat(game.getUnitAt(new Position(2,0)).getDefensiveStrength(), is(3));
+    game.performUnitActionAt(new Position(2,0));
+    assertThat(game.getUnitAt(new Position(2,0)).getDefensiveStrength(), is(3));
+    game.endOfTurn();
+    game.endOfTurn();
+    assertThat(game.moveUnit(new Position(2,0),(new Position(3,0))), is(true));
+    assertThat(game.getUnitAt(new Position(3,0)).getTypeString(), is(GameConstants.ARCHER));
+    game.performUnitActionAt(new Position(3,0));
+    assertThat(game.getUnitAt(new Position(3,0)).getDefensiveStrength(), is(3));
+    game.endOfTurn();
+    game.endOfTurn();
+    assertThat(game.moveUnit(new Position(3,0),(new Position(2,0))), is(true));
+  }
+
 }

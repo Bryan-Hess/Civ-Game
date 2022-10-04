@@ -38,7 +38,7 @@ public class GameImpl implements Game {
   public Player currentPlayer;
   public int currentAge;
 
-  //Declaration of implimentations
+  //Declaration of implementations
   WorldAgingImpl WorldAging;
   DecideWinnerImpl decideWinner;
   ArcherActionImpl archerAction;
@@ -46,7 +46,7 @@ public class GameImpl implements Game {
 
   WorldLayoutImpl worldLayout;
 
-  //Declares the implimentations based on the Civ varient
+  //Declares the implementations based on the Civ variant
   public void setWorldAgingVariation(String civVar){
     WorldAging = new WorldAgingImpl(civVar);
   }
@@ -65,10 +65,9 @@ public class GameImpl implements Game {
   }
 
   public GameImpl( String civVar){
-    // Create a hashMap of all the tiles. A tile can be called by using its Position.
-    // Each tile is type Plains as default, except for tiles (1,0),(0,1), and (2,2), which are Oceans, Hills, and Mountains, respectively.
+
     setWorldLayoutVariation(civVar);
-    //Sets the implimentations based on the Civ varient
+    //Sets the implementations based on the Civ variant
     setWorldAgingVariation(civVar);
     setDecideWinnerVariation(civVar);
     setArcherActionVariation(civVar);
@@ -99,7 +98,7 @@ public class GameImpl implements Game {
     return currentAge;
   }
 
-  //Unit moving algorithem
+  //Unit moving algorithm
   public boolean moveUnit( Position from, Position to ) {
     int oldR,oldC,newR,newC;
     oldR = from.getRow();
@@ -136,7 +135,6 @@ public class GameImpl implements Game {
     } else if (worldLayout.getCityAt(to)!=null&&worldLayout.getUnitAt(from).getMoveCount()>0) { //If unit moving onto a city
         if(!currentPlayer.equals(worldLayout.getCityAt(to).getOwner())) { //If unit moves to enemy city, take the city
             worldLayout.moveUnitTo(to, from);
-            // unitMap.remove(from);
             worldLayout.removeUnitAt(from);
             worldLayout.getUnitAt(to).countMove();
 
@@ -146,14 +144,12 @@ public class GameImpl implements Game {
             return true;
         }else{ //Otherwise the city is friendly
             worldLayout.moveUnitTo(to, from);
-            // unitMap.remove(from);
             worldLayout.removeUnitAt(from);
             worldLayout.getUnitAt(to).countMove();
         }
     } else if(worldLayout.getUnitAt(from).getMoveCount()>0){
 
       worldLayout.moveUnitTo(to,from);
-      // unitMap.remove(from);
       worldLayout.removeUnitAt(from);
       worldLayout.getUnitAt(to).countMove();
       return true;

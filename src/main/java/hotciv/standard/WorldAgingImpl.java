@@ -13,7 +13,7 @@ public class WorldAgingImpl implements WorldAging {
     }
 
     public int incrementAge(int currentAge) {
-        if(civVariation.equals(GameConstants.BETACIV)){ //BetaCiv's progressive ageing algorithem
+        if(civVariation.equals(GameConstants.BETACIV)){ //BetaCiv's progressive aging algorithm
             if( currentAge >= -4000 && currentAge < -100 ){
                 return currentAge + 100;
             }else if( currentAge == -100 ){
@@ -31,7 +31,7 @@ public class WorldAgingImpl implements WorldAging {
             }else{
                 return currentAge + 1;
             }
-        }else{  //AlphaCiv's linear ageing algorithem
+        }else{  //AlphaCiv's linear aging algorithm
             return currentAge + 100;
         }
     }
