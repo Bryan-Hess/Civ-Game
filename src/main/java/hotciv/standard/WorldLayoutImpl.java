@@ -13,6 +13,7 @@ public class WorldLayoutImpl implements WorldLayout {
 
 
 
+    //Hashmaps for tiles, units, cities, and arraylist of cities
     public Map<Position, Tile> tileMap = new HashMap<>();
     public Map<Position, Unit> unitMap = new HashMap<>();
     public Map<Position, City> cityMap = new HashMap<>();
@@ -25,9 +26,10 @@ public class WorldLayoutImpl implements WorldLayout {
     }
 
     public String[] layout;
-    public void implementWorldLayout() {
 
-        if(civVariation.equals(GameConstants.DELTACIV)){
+    //Initializes the world layout
+    public void implementWorldLayout() {
+        if(civVariation.equals(GameConstants.DELTACIV)){ //DeltaCiv's Map Layout
             layout =
                     new String[] {
                             "...ooMooooo.....",
@@ -47,6 +49,7 @@ public class WorldLayoutImpl implements WorldLayout {
                             "..ooohhoo.......",
                             ".....ooooooooo..",
                     };
+            //DeltaCiv's City and Unite layout
             cityMap.put(new Position(8,12), new CityImpl(Player.RED));
             cityMap.put(new Position(4, 5), new CityImpl(Player.BLUE));
 
@@ -56,6 +59,7 @@ public class WorldLayoutImpl implements WorldLayout {
             }
 
         else {
+            //AlphaCiv's map layouy
             layout =
                     new String[]{
                             "ohoooooooooooooo",
@@ -75,6 +79,7 @@ public class WorldLayoutImpl implements WorldLayout {
                             "oooooooooooooooo",
                             "oooooooooooooooo",
                     };
+            //AlphaCiv's Unit and City layout
             cityMap.put(new Position(1, 1), new CityImpl(Player.RED));
             cityMap.put(new Position(4, 1), new CityImpl(Player.BLUE));
             unitMap.put(new Position(2, 0), new UnitImpl(Player.RED, GameConstants.ARCHER));
@@ -105,6 +110,7 @@ public class WorldLayoutImpl implements WorldLayout {
 
     }
 
+    //Mostly setters and getters for units/cities/tiles given a position
     public City getCityAt( Position p){
 
         return cityMap.get(p);
@@ -145,9 +151,8 @@ public class WorldLayoutImpl implements WorldLayout {
     public void addUnit( Position p, Unit unit){
 
         unitMap.put(p,unit);
-
-
     }
+
     public void moveUnitTo(Position to, Position from){
         if(unitMap.get(from).getMoveCount()>0) //Makes sure unit has remaining moves left in turn
             unitMap.put(to,unitMap.get(from));
@@ -157,5 +162,6 @@ public class WorldLayoutImpl implements WorldLayout {
 
         return cityMap.values();
     }
+
 }
 
