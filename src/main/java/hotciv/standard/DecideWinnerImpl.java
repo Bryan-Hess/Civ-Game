@@ -23,7 +23,6 @@ public class DecideWinnerImpl implements DecideWinner{
             }
             return null;
 
-
         } else if(civVariation.equals(GameConstants.ALPHACIV)){
             if(currentAge >= -3000) {
                 return Player.RED;

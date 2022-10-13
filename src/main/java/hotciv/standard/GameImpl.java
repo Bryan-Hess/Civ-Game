@@ -102,11 +102,6 @@ public class GameImpl implements Game {
     return currentAge;
   }
   public boolean moveUnit( Position from, Position to ) {
-    int oldR,oldC,newR,newC;
-    oldR = from.getRow();
-    oldC = from.getColumn();
-    newR = to.getRow();
-    newC = to.getColumn();
     //If trying to move a unit not owned by the player
     if(worldLayout.getUnitAt(from).getOwner() != currentPlayer){
       return false;
@@ -116,51 +111,48 @@ public class GameImpl implements Game {
       return false;
     }
     //If trying to move an invalid distance
-    if(java.lang.Math.abs(newR-oldR)>1 || java.lang.Math.abs(newC-oldC)>1){
+    if(java.lang.Math.abs(to.getRow()-from.getRow())>1 || java.lang.Math.abs(to.getColumn()-from.getColumn())>1){
       return false;
     }
 
-    if(worldLayout.getUnitAt(to)!=null&&worldLayout.getUnitAt(from).getMoveCount()>0){
-      if(currentPlayer.equals(worldLayout.getUnitAt(to).getOwner())){
+    //If unit has no valid moves
+    if(0 >= worldLayout.getUnitAt(from).getMoveCount()){
+        return false;
+    }
+
+    //If the target tile has a unit owned by the same player
+    if(worldLayout.getUnitAt(to)!=null&&currentPlayer.equals(worldLayout.getUnitAt(to).getOwner())){
         return false; //if the player tries to move their unit on a tile that already has one of their units
-      }
-      else{
-        //In future iterations, we will compare attacking/defending strength.
-        //For this iteration, we do not need to compare stats, because the attacker always wins
-        worldLayout.removeUnitAt(to);
-        worldLayout.moveUnitTo(to,from);
-       // unitMap.remove(from);
-        worldLayout.removeUnitAt(from);
-        worldLayout.getUnitAt(to).countMove();
+    }
+
+    //If the target tile has a unit owned by a differnt player (PVP COMBAT)
+    if(worldLayout.getUnitAt(to)!=null){
+        pvpCombat(from, to);
         return true;
-      }
-    } else if (worldLayout.getCityAt(to)!=null&&worldLayout.getUnitAt(from).getMoveCount()>0) { //If unit moving onto a city
-        if(!currentPlayer.equals(worldLayout.getCityAt(to).getOwner())) { //If unit moves to enemy city, take the city
-            worldLayout.moveUnitTo(to, from);
-            // unitMap.remove(from);
-            worldLayout.removeUnitAt(from);
-            worldLayout.getUnitAt(to).countMove();
+    }
 
-            //Removes the city and places a new one, if requirements change down the line will need to add setter/getter for city ownership to cityImpl
-            worldLayout.removeCityAt(to);
-            worldLayout.addCityAt(to, currentPlayer);
-        }else{
-            worldLayout.moveUnitTo(to, from);
-            // unitMap.remove(from);
-            worldLayout.removeUnitAt(from);
-            worldLayout.getUnitAt(to).countMove();
-        }
-    } else if(worldLayout.getUnitAt(from).getMoveCount()>0){
+    //If unit moving onto an enemy city
+    if (worldLayout.getCityAt(to)!=null&&!currentPlayer.equals(worldLayout.getCityAt(to).getOwner())) {
+        //Removes the city and places a new one, if requirements change down the line will need to add setter/getter for city ownership to cityImpl
+        worldLayout.removeCityAt(to);
+        worldLayout.addCityAt(to, currentPlayer);
+    }
 
+    //Default case, successfully move unit
+    worldLayout.moveUnitTo(to,from);
+    worldLayout.removeUnitAt(from);
+    worldLayout.getUnitAt(to).countMove();
+    return true;
+  }
+  public void pvpCombat( Position from, Position to ) {
+      //In future iterations, we will compare attacking/defending strength.
+      //For this iteration, we do not need to compare stats, because the attacker always wins
+      worldLayout.removeUnitAt(to);
       worldLayout.moveUnitTo(to,from);
-      // unitMap.remove(from);
       worldLayout.removeUnitAt(from);
       worldLayout.getUnitAt(to).countMove();
-      return true;
-    }
-    return false;
-
   }
+
   public void endOfTurn() {
     currentAge = WorldAging.incrementAge(currentAge);
     //Changes player each turn

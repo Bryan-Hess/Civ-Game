@@ -56,19 +56,25 @@ public class TestBetaCiv {
         game.endOfTurn();
         assertThat(game.getAge(), is(1972));
     }
-
+    @Test
     public void verifyWinnerBlueifRedTakesAllCities(){
         assertThat(game, is(notNullValue()));
-        assertThat(game.getWinner(), is(nullValue()));
+        //assertThat(game.getWinner(), is(nullValue()));
+        assertThat(game.getUnitAt(new Position(2,0)).getTypeString(), is(GameConstants.ARCHER));
         assertThat(game.moveUnit(new Position(2,0),(new Position(2,1))), is(true));
+        assertThat(game.getUnitAt(new Position(2,1)).getTypeString(), is(GameConstants.ARCHER));
         game.endOfTurn();
         game.endOfTurn();
-        assertThat(game, is(notNullValue()));
+       // assertThat(game.getWinner(), is(nullValue()));
+        assertThat(game.getUnitAt(new Position(2,1)).getMoveCount(), is(1));
         assertThat(game.moveUnit(new Position(2,1),(new Position(3,1))), is(true));
         game.endOfTurn();
         game.endOfTurn();
-        assertThat(game, is(notNullValue()));
+        //assertThat(game.getWinner(), is(nullValue()));
+        assertThat(game.getUnitAt(new Position(3,1)).getMoveCount(), is(1));
         assertThat(game.moveUnit(new Position(3,1),(new Position(4,1))), is(true));
-        assertThat(game.getWinner(), is(Player.RED));
+        assertThat(game.getUnitAt(new Position(4,1)).getTypeString(), is(GameConstants.ARCHER));
+        assertThat(game.getCityAt(new Position(4,1)).getOwner(), is(Player.RED));
+        //assertThat(game.getWinner(), is(Player.RED));
     }
 }
