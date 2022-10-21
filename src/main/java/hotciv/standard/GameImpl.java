@@ -169,12 +169,10 @@ public class GameImpl implements Game {
       for(int i = 0; i < GameConstants.WORLDSIZE; i++){
           for(int j = 0; j < GameConstants.WORLDSIZE; j++) {
               if(isTreasurySufficientForUnit(i,j)){
-                  //Boolean isCurrentSpaceEmpty = worldLayout.getUnitAt((new Position(i,j))) == null;
                   Player currentCityOwner = worldLayout.getCityAt(new Position(i,j)).getOwner();
                   String currentCityProduction = worldLayout.getCityAt(new Position(i,j)).getProduction();
                   Position emptyTile = findEmptyTileForCityUnitProduction(i,j);
                   worldLayout.addUnitAt(emptyTile,currentCityOwner,currentCityProduction);
-
               }
           }
       }
