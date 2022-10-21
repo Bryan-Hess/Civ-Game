@@ -208,8 +208,9 @@ public class TestAlphaCiv {
   public void verifyBlueCityProducesNewLegionsInClockwise(){
     assertThat(game, is(notNullValue()));
     game.changeProductionInCityAt(new Position(4,1),GameConstants.LEGION);
-    for(int i = 0; i < 5; i++)
+    for(int i = 0; i < 5; i++) {
       game.endOfTurn();
+    }
     assertThat(game.getUnitAt(new Position(4,1)).getTypeString(), is(GameConstants.LEGION));
     assertThat(game.getUnitAt(new Position(4,0)).getTypeString(), is(GameConstants.LEGION));
   }
