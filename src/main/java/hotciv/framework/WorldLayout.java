@@ -1,6 +1,6 @@
 package hotciv.framework;
 
-import hotciv.standard.CityImpl;
+import java.util.Collection;
 
 public interface WorldLayout {
 
@@ -23,5 +23,8 @@ public interface WorldLayout {
     public void addUnit( Position p, Unit unit);
 
     public void moveUnitTo(Position to, Position from);
+
+    public Collection<City> getCityList();
+
 
 }

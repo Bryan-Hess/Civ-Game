@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface DecideWinner {
 
-    public Player getWinner(int currentAge, List<CityImpl> cities);
+    public Player getWinner(int currentAge, WorldLayout worldLayout);
 }

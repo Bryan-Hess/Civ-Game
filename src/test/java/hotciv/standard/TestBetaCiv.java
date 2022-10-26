@@ -13,8 +13,6 @@ public class TestBetaCiv {
     @Before
     public void setUp() {
         game = new GameImpl(GameConstants.BETACIV);
-       // ((GameImpl)game).setWorldAgingVariation(GameConstants.BETACIV);
-       // ((GameImpl)game).setDecideWinnerVariation(GameConstants.BETACIV);
     }
 
     @Test
@@ -76,5 +74,55 @@ public class TestBetaCiv {
         assertThat(game.getUnitAt(new Position(4,1)).getTypeString(), is(GameConstants.ARCHER));
         assertThat(game.getCityAt(new Position(4,1)).getOwner(), is(Player.RED));
         //assertThat(game.getWinner(), is(Player.RED));
+    }
+
+    // Same test as AlphaCiv. Confirm same starting layout for BetaCiv
+    @Test
+    public void verifyStartingTownLayout(){
+        assertThat(game, is(notNullValue()));
+        for(int c = 0; c < GameConstants.WORLDSIZE; c++){
+            for(int r = 0; r < GameConstants.WORLDSIZE; r++) {
+                if(r == 1 & c == 1){
+                    assertThat(game.getCityAt(new Position(1,1)).getOwner(), is(Player.RED));
+                }else if(r == 4 & c == 1){
+                    assertThat(game.getCityAt(new Position(4,1)).getOwner(), is(Player.BLUE));
+                }else{
+                    assertThat(game.getCityAt(new Position(r,c)), is(nullValue()));
+                }
+            }
+        }
+    }
+
+    //This tests a proper Settler action according to the Beta Civ requirements
+    //Nothing happens
+    @Test
+    public void testSettlerAction(){
+
+        assertThat(game, is(notNullValue()));
+        assertThat(game.getUnitAt(new Position(4,3)).getTypeString(), is(GameConstants.SETTLER));
+        assertThat(game.getCityAt(new Position(4,3)), is(nullValue()));
+        game.performUnitActionAt(new Position(4,3));
+        assertThat(game.getUnitAt(new Position(4,3)).getTypeString(), is(GameConstants.SETTLER));
+        assertThat(game.getCityAt(new Position(4,3)), is(nullValue()));
+    }
+
+    //This tests a proper Archer action according to the Beta Civ requirements
+    //nothing happens
+    @Test
+    public void testArcherAction(){
+        assertThat(game, is(notNullValue()));
+        assertThat(game.getUnitAt(new Position(2,0)).getTypeString(), is(GameConstants.ARCHER));
+        assertThat(game.getUnitAt(new Position(2,0)).getDefensiveStrength(), is(3));
+        game.performUnitActionAt(new Position(2,0));
+        assertThat(game.getUnitAt(new Position(2,0)).getDefensiveStrength(), is(3));
+        game.endOfTurn();
+        game.endOfTurn();
+        assertThat(game.moveUnit(new Position(2,0),(new Position(3,0))), is(true));
+        assertThat(game.getUnitAt(new Position(3,0)).getTypeString(), is(GameConstants.ARCHER));
+        game.performUnitActionAt(new Position(3,0));
+        assertThat(game.getUnitAt(new Position(3,0)).getDefensiveStrength(), is(3));
+        game.endOfTurn();
+        game.endOfTurn();
+        assertThat(game.moveUnit(new Position(3,0),(new Position(2,0))), is(true));
     }
 }

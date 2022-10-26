@@ -4,11 +4,11 @@ import hotciv.framework.City;
 import hotciv.framework.Player;
 
 public class CityImpl implements City {
+
+    //Declaration of private variables
     private Player owner;
     private int treasury;
-
     private int size;
-
     private String production;
 
     public CityImpl(Player name){

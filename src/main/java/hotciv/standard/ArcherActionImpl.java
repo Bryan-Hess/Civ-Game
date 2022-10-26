@@ -11,7 +11,7 @@ public class ArcherActionImpl implements ArcherAction {
     }
 
     public void fortify(Position p, WorldLayout worldLayout) {
-        if (civVariation.equals(GameConstants.GAMMACIV)){
+        if (civVariation.equals(GameConstants.GAMMACIV)){ //GammaCiv allows for archer fortification
             if(worldLayout.getUnitAt(p).getkeepMoveToZero()==false) { //Doubles defensive strength and immobilizes unit if unit is not fortified
                 worldLayout.getUnitAt(p).setDefensiveStrength(worldLayout.getUnitAt(p).getDefensiveStrength() * 2);
                 worldLayout.getUnitAt(p).setkeepMoveToZero(true);

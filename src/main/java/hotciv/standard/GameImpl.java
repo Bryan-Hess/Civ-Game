@@ -33,12 +33,11 @@ import java.net.SocketOption;
 
 public class GameImpl implements Game {
 
- // public Map<Position, Tile> tileMap;
- // public Map<Position, Unit> unitMap;
-//  public Map<Position, City> cityMap;
+    //Declaration of all game variables
   public Player currentPlayer;
   public int currentAge;
 
+  //Declaration of implementations
   WorldAgingImpl WorldAging;
   DecideWinnerImpl decideWinner;
   ArcherActionImpl archerAction;
@@ -46,6 +45,7 @@ public class GameImpl implements Game {
 
   WorldLayoutImpl worldLayout;
 
+  //Declares the implementations based on the Civ variant
   public void setWorldAgingVariation(String civVar){
     WorldAging = new WorldAgingImpl(civVar);
   }
@@ -64,21 +64,19 @@ public class GameImpl implements Game {
   }
 
   public GameImpl( String civVar){
-    // Create a hashMap of all the tiles. A tile can be called by using its Position.
-    // Each tile is type Plains as default, except for tiles (1,0),(0,1), and (2,2), which are Oceans, Hills, and Mountains, respectively.
-    setWorldLayoutVariation(civVar);
 
+    setWorldLayoutVariation(civVar);
+    //Sets the implementations based on the Civ variant
     setWorldAgingVariation(civVar);
     setDecideWinnerVariation(civVar);
     setArcherActionVariation(civVar);
     setSettlerActionVariation(civVar);
-
-
-
+    //Game starts on Red player in year 4000BC
     currentPlayer = Player.RED;
     currentAge = -4000;
   }
 
+  //Getters for tiles/units/cities/player
   public Tile getTileAt( Position p ) {
     return worldLayout.getTileAt(p);
   }
@@ -92,14 +90,14 @@ public class GameImpl implements Game {
     return currentPlayer;
   }
   public Player getWinner() {
-    if(currentAge >= -3000)
-      return Player.RED;
-    else
-      return null;
+      return decideWinner.getWinner(currentAge,worldLayout);
+
   }
   public int getAge() {
     return currentAge;
   }
+
+  //Unit moving algorithm
   public boolean moveUnit( Position from, Position to ) {
     //If trying to move a unit not owned by the player
     if(worldLayout.getUnitAt(from).getOwner() != currentPlayer){
@@ -121,6 +119,7 @@ public class GameImpl implements Game {
 
     //If the target tile has a unit owned by the same player
     if(worldLayout.getUnitAt(to)!=null&&currentPlayer.equals(worldLayout.getUnitAt(to).getOwner())){
+
         return false; //if the player tries to move their unit on a tile that already has one of their units
     }
 
@@ -136,6 +135,7 @@ public class GameImpl implements Game {
         worldLayout.removeCityAt(to);
         worldLayout.addCityAt(to, currentPlayer);
     }
+
 
     //Default case, successfully move unit
     worldLayout.moveUnitTo(to,from);
@@ -187,13 +187,12 @@ public class GameImpl implements Game {
     }
   }
   public void performUnitActionAt( Position p ) {
-
     if(worldLayout.getUnitAt(p).getTypeString().equals(GameConstants.SETTLER)) {
         settlerAction.buildCity(p, worldLayout);
     } else if (worldLayout.getUnitAt(p).getTypeString().equals(GameConstants.ARCHER)) {
         archerAction.fortify(p, worldLayout);
     }
-
+    
     }
     public Player switchPlayerTurn(Player p ){
       if(p == Player.BLUE){
@@ -264,5 +263,8 @@ public class GameImpl implements Game {
         return null;
     }
 
+
   }
+
+}
 
