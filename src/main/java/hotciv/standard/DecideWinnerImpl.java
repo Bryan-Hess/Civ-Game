@@ -46,8 +46,8 @@ public class DecideWinnerImpl implements DecideWinner {
             }
             return name1; //If all cities have the same owner, that player wins
 
-        } else { //AlphaCiv's winner is Red at year 3000BC
-            if (currentAge >= -3000) {
+        } else if(civVariation.equals(GameConstants.ALPHACIV)){
+            if(currentAge >= -3000) {
                 return Player.RED;
             } else {
                 return null;

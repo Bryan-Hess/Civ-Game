@@ -31,8 +31,10 @@ public class WorldAgingImpl implements WorldAging {
             }else{
                 return currentAge + 1;
             }
-        }else{  //AlphaCiv's linear aging algorithm
+        }else if(civVariation.equals(GameConstants.ALPHACIV)){
+
             return currentAge + 100;
-        }
+        }else
+        return currentAge + 100;
     }
 }
