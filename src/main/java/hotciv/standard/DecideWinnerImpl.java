@@ -46,13 +46,13 @@ public class DecideWinnerImpl implements DecideWinner {
             }
             return name1; //If all cities have the same owner, that player wins
 
-        } else if(civVariation.equals(GameConstants.ALPHACIV)){
-            if(currentAge >= -3000) {
+        } else if (civVariation.equals(GameConstants.ALPHACIV) || civVariation.equals(GameConstants.GAMMACIV) || civVariation.equals(GameConstants.DELTACIV)) {
+            if (currentAge >= -3000) {
                 return Player.RED;
             } else {
                 return null;
             }
-        }
+        } else
+            return null;
     }
-
 }
