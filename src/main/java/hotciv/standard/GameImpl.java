@@ -2,8 +2,6 @@ package hotciv.standard;
 
 import hotciv.framework.*;
 
-import java.net.SocketOption;
-
 /** Skeleton implementation of HotCiv.
  
    This source code is from the book 
@@ -42,7 +40,7 @@ public class GameImpl implements Game {
   DecideWinnerImpl decideWinner;
   ArcherActionImpl archerAction;
   SettlerActionImpl settlerAction;
-
+  AttackStrategyImpl attackStrategy;
   WorldLayoutImpl worldLayout;
 
   //Declares the implementations based on the Civ variant
@@ -58,6 +56,9 @@ public class GameImpl implements Game {
   public void setSettlerActionVariation(String civVar){
     settlerAction = new SettlerActionImpl(civVar);
   }
+  public void setAttackStrategyVariation(String civVar){
+        attackStrategy = new AttackStrategyImpl(civVar);
+    }
   public void setWorldLayoutVariation(String civVar){
     worldLayout = new WorldLayoutImpl(civVar);
     worldLayout.implementWorldLayout();
@@ -146,10 +147,11 @@ public class GameImpl implements Game {
   public void pvpCombat( Position from, Position to ) {
       //In future iterations, we will compare attacking/defending strength.
       //For this iteration, we do not need to compare stats, because the attacker always wins
-      worldLayout.removeUnitAt(to);
-      worldLayout.moveUnitTo(to,from);
-      worldLayout.removeUnitAt(from);
-      worldLayout.getUnitAt(to).countMove();
+      //worldLayout.removeUnitAt(to);
+      //worldLayout.moveUnitTo(to,from);
+      //worldLayout.removeUnitAt(from);
+      //worldLayout.getUnitAt(to).countMove();
+      attackStrategy.attackUnit(from, to, worldLayout);
   }
 
   public void endOfTurn() {
