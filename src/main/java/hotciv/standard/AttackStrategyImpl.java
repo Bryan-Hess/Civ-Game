@@ -20,16 +20,26 @@ public class AttackStrategyImpl implements AttackStrategy {
             int defender_strength = (worldLayout.getUnitAt(to).getDefensiveStrength() + getFriendlySupport(to, worldLayout)) * getTerrainFactor(to, worldLayout);
             int attacker_strength = (worldLayout.getUnitAt(from).getAttackingStrength() + getFriendlySupport(from, worldLayout)) * getTerrainFactor(from, worldLayout);
 
-            if (attacker_strength > defender_strength)
+            if(attacker_strength > defender_strength) {
+                processSuccessfulAttack(from, to, worldLayout);
                 return true;
+            }
             else
                 return false;
-        }else
-            worldLayout.removeUnitAt(to);
-            worldLayout.moveUnitTo(to,from);
-            worldLayout.removeUnitAt(from);
-            worldLayout.getUnitAt(to).countMove();
+        }else {
+            processSuccessfulAttack(from, to, worldLayout);
             return true;
+        }
+    }
+
+    private void processSuccessfulAttack(Position from, Position to, WorldLayout worldLayout){
+
+        worldLayout.removeUnitAt(to);
+        worldLayout.moveUnitTo(to,from);
+        worldLayout.removeUnitAt(from);
+        worldLayout.getUnitAt(to).countMove();
+        worldLayout.addWin(worldLayout.getUnitAt(to).getOwner());
+
     }
 
     private int getFriendlySupport(Position p, WorldLayout worldLayout) {
@@ -37,13 +47,13 @@ public class AttackStrategyImpl implements AttackStrategy {
         int[] rowChange = new int[]{-1, -1, 0, +1, +1, +1, 0, -1};
         int[] columnChange = new int[]{0, +1, +1, +1, 0, -1, -1, -1};
 
-        //Itterate around position
+        //Iterate around position
         int supporting = 0;
         for (int i = 0; i < rowChange.length; i++) {
             int row = p.getRow() + rowChange[i];
             int col = p.getColumn() + columnChange[i];
             if (row>=0 && col>=0 && row<GameConstants.WORLDSIZE && col<GameConstants.WORLDSIZE){
-                //Numer of supporting units
+                //Number of supporting units
                 Position nextPos = new Position(row, col);
                 if(!isNull(worldLayout.getUnitAt(nextPos))){
                     if (worldLayout.getUnitAt(p).getOwner().equals(worldLayout.getUnitAt(nextPos).getOwner())) {
@@ -72,3 +82,5 @@ public class AttackStrategyImpl implements AttackStrategy {
     }
 
 }
+
+

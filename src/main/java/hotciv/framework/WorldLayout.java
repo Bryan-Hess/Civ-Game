@@ -27,4 +27,7 @@ public interface WorldLayout {
     public Collection<City> getCityList();
 
 
+    public void addWin(Player owner);
+
+    public int getWins(Player owner);
 }

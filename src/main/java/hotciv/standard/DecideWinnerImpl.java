@@ -46,7 +46,28 @@ public class DecideWinnerImpl implements DecideWinner {
             }
             return name1; //If all cities have the same owner, that player wins
 
-        } else if (civVariation.equals(GameConstants.ALPHACIV) || civVariation.equals(GameConstants.GAMMACIV) || civVariation.equals(GameConstants.DELTACIV)) {
+        } else if(civVariation.equals(GameConstants.EPSILONCIV)){
+            boolean r = worldLayout.getWins(Player.RED) > 2;
+            boolean b = worldLayout.getWins(Player.BLUE) > 2;
+            boolean g = worldLayout.getWins(Player.GREEN) > 2;
+            boolean y = worldLayout.getWins(Player.YELLOW) > 2;
+            if(r)
+                return Player.RED;
+            else if(b)
+                return Player.BLUE;
+            else if(g)
+                return Player.GREEN;
+            else if(y)
+                return Player.YELLOW;
+            else
+                return null;
+
+        }
+        else if(civVariation.equals(GameConstants.ZETACIV)){
+            //TODO
+            return null;
+        }
+        else if (civVariation.equals(GameConstants.ALPHACIV) || civVariation.equals(GameConstants.GAMMACIV) || civVariation.equals(GameConstants.DELTACIV)) {
             if (currentAge >= -3000) {
                 return Player.RED;
             } else {

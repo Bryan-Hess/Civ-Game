@@ -21,6 +21,8 @@ public class WorldLayoutImpl implements WorldLayout {
     public Map<Position, Unit> unitMap = new HashMap<>();
     public Map<Position, City> cityMap = new HashMap<>();
 
+    public Map<Player, Integer> winsMap = new HashMap<>();
+
    // public ArrayList<City> cityList = new ArrayList<>();
 
 
@@ -167,5 +169,14 @@ public class WorldLayoutImpl implements WorldLayout {
         return cityMap.values();
     }
 
+    public void addWin(Player player){
+
+        winsMap.put(player, winsMap.get(player)+1);
+    }
+
+    public int getWins(Player player){
+
+        return winsMap.get(player);
+    }
 }
 

@@ -151,7 +151,9 @@ public class GameImpl implements Game {
       //worldLayout.moveUnitTo(to,from);
       //worldLayout.removeUnitAt(from);
       //worldLayout.getUnitAt(to).countMove();
-      attackStrategy.attackUnit(from, to, worldLayout);
+      boolean retVale;
+      retVale = attackStrategy.attackUnit(from, to, worldLayout);
+
   }
 
   public void endOfTurn() {
