@@ -11,6 +11,7 @@ public class WorldLayoutImpl implements WorldLayout {
 
     String civVariation;
 
+    int round=0;
 
 
     //Hashmaps for tiles, units, cities, and arraylist of cities
@@ -183,6 +184,21 @@ public class WorldLayoutImpl implements WorldLayout {
     public int getWins(Player player){
 
         return winsMap.get(player);
+    }
+
+    public void resetWins(){
+        winsMap.put(Player.RED, 0);
+        winsMap.put(Player.BLUE, 0);
+        winsMap.put(Player.GREEN, 0);
+        winsMap.put(Player.YELLOW, 0);
+    }
+
+    public int getRound(){
+        return round;
+    }
+
+    public void incrimentRound(){
+        round++;
     }
 }
 

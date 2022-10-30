@@ -24,8 +24,10 @@ public class AttackStrategyImpl implements AttackStrategy {
                 processSuccessfulAttack(from, to, worldLayout);
                 return true;
             }
-            else
+            else { //Kills attacking unit
+                worldLayout.removeUnitAt(to);
                 return false;
+            }
         }else {
             processSuccessfulAttack(from, to, worldLayout);
             return true;

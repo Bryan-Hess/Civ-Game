@@ -30,4 +30,10 @@ public interface WorldLayout {
     public void addWin(Player owner);
 
     public int getWins(Player owner);
+
+    public void resetWins();
+
+    public int getRound();
+
+    public void incrimentRound();
 }

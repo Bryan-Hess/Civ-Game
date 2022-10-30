@@ -181,6 +181,7 @@ public class GameImpl implements Game {
               }
           }
       }
+      worldLayout.incrimentRound();
   }
 
   public void changeWorkForceFocusInCityAt( Position p, String balance ) {}

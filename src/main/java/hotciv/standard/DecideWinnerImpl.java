@@ -64,7 +64,15 @@ public class DecideWinnerImpl implements DecideWinner {
 
         }
         else if(civVariation.equals(GameConstants.ZETACIV)){
-            //TODO
+            if (worldLayout.getRound() <= 20) {
+                DecideWinnerImpl betaStrat = new DecideWinnerImpl(GameConstants.BETACIV);
+                betaStrat.getWinner(currentAge, worldLayout);
+            }
+            else {
+                worldLayout.resetWins(); //Resets wins for new win method
+                DecideWinnerImpl epsilonStrat = new DecideWinnerImpl((GameConstants.EPSILONCIV));
+                epsilonStrat.getWinner(currentAge, worldLayout);
+            }
             return null;
         }
         else if (civVariation.equals(GameConstants.ALPHACIV) || civVariation.equals(GameConstants.GAMMACIV) || civVariation.equals(GameConstants.DELTACIV)) {
