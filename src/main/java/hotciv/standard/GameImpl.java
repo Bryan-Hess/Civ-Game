@@ -72,6 +72,7 @@ public class GameImpl implements Game {
     setDecideWinnerVariation(civVar);
     setArcherActionVariation(civVar);
     setSettlerActionVariation(civVar);
+    setAttackStrategyVariation(civVar);
     //Game starts on Red player in year 4000BC
     currentPlayer = Player.RED;
     currentAge = -4000;

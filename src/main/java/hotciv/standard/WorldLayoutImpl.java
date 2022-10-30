@@ -28,10 +28,16 @@ public class WorldLayoutImpl implements WorldLayout {
 
     public WorldLayoutImpl(String civVariationIN){
         civVariation = civVariationIN;
+        initializeWins();
     }
 
     public String[] layout;
-
+    private void initializeWins(){
+        winsMap.put(Player.RED,0);
+        winsMap.put(Player.BLUE,0);
+        winsMap.put(Player.GREEN,0);
+        winsMap.put(Player.YELLOW,0);
+    }
     //Initializes the world layout
     public void implementWorldLayout() {
         if(civVariation.equals(GameConstants.DELTACIV)){ //DeltaCiv's Map Layout
@@ -170,8 +176,8 @@ public class WorldLayoutImpl implements WorldLayout {
     }
 
     public void addWin(Player player){
-
-        winsMap.put(player, winsMap.get(player)+1);
+        int z = getWins(player);
+        winsMap.put(player, z+1);
     }
 
     public int getWins(Player player){
