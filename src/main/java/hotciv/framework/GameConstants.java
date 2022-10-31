@@ -51,6 +51,5 @@ public class GameConstants {
   public static final String GAMMACIV = "gammaCiv";
   public static final String DELTACIV = "deltaCiv";
   public static final String EPSILONCIV = "epsilonCiv";
-
   public static final String ZETACIV = "zetaCiv";
 }

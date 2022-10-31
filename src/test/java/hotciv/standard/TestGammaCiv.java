@@ -24,7 +24,6 @@ public class TestGammaCiv {
     //The settler turns into a city owned by the same player
     @Test
     public void testSettlerAction(){
-
         assertThat(game, is(notNullValue()));
         assertThat(game.getUnitAt(new Position(4,3)).getTypeString(), is(GameConstants.SETTLER));
         assertThat(game.getCityAt(new Position(4,3)), is(nullValue()));
