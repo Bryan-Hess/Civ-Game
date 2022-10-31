@@ -19,9 +19,8 @@ public class AttackStrategyImpl implements AttackStrategy {
 
     public boolean attackUnit(Position from, Position to, WorldLayout worldLayout) {
         if(civVariation.equals(GameConstants.EPSILONCIV)) {
-            int defender_strength = (worldLayout.getUnitAt(to).getDefensiveStrength() + getFriendlySupport(to, worldLayout)) * getTerrainFactor(to, worldLayout);
-            int attacker_strength = (worldLayout.getUnitAt(from).getAttackingStrength() + getFriendlySupport(from, worldLayout)) * getTerrainFactor(from, worldLayout);
-
+            int defender_strength = getDefenseStrength(to,worldLayout);
+            int attacker_strength = getAttackStrength(from,worldLayout);
             int attackPower = attackRoll.getRoll();
             int defensePower = defenseRoll.getRoll();
 
@@ -31,7 +30,7 @@ public class AttackStrategyImpl implements AttackStrategy {
                 return true;
             }
             else { //Kills attacking unit
-                worldLayout.removeUnitAt(to);
+                worldLayout.removeUnitAt(from);
                 return false;
             }
         }else {
@@ -73,7 +72,15 @@ public class AttackStrategyImpl implements AttackStrategy {
 
         return supporting;
     }
+    public int getAttackStrength(Position p, WorldLayout worldLayout){
+        int sum = (worldLayout.getUnitAt(p).getAttackingStrength() + getFriendlySupport(p, worldLayout)) * getTerrainFactor(p, worldLayout);
+        return sum;
+    }
 
+    public int getDefenseStrength(Position p, WorldLayout worldLayout){
+        int sum = (worldLayout.getUnitAt(p).getDefensiveStrength() + getFriendlySupport(p, worldLayout)) * getTerrainFactor(p, worldLayout);
+        return sum;
+    }
     public int getTerrainFactor(Position p, WorldLayout worldLayout) {
 
         if(worldLayout.getCityAt(p) != null)

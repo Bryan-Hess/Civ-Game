@@ -97,6 +97,14 @@ public class WorldLayoutImpl implements WorldLayout {
             unitMap.put(new Position(2, 0), new UnitImpl(Player.RED, GameConstants.ARCHER));
             unitMap.put(new Position(3, 2), new UnitImpl(Player.BLUE, GameConstants.LEGION));
             unitMap.put(new Position(4, 3), new UnitImpl(Player.RED, GameConstants.SETTLER));
+
+            if(civVariation.equals(GameConstants.EPSILONCIV)){
+                unitMap.put(new Position(4, 4), new UnitImpl(Player.BLUE, GameConstants.LEGION));
+                unitMap.put(new Position(8, 8), new UnitImpl(Player.BLUE, GameConstants.LEGION));
+                unitMap.put(new Position(8, 9), new UnitImpl(Player.RED, GameConstants.LEGION));
+                unitMap.put(new Position(9, 9), new UnitImpl(Player.RED, GameConstants.LEGION));
+                unitMap.put(new Position(9, 10), new UnitImpl(Player.RED, GameConstants.LEGION));
+            }
         }
                 // Basically we use a 'data driven' approach - code the
                 // layout in a simple semi-visual representation, and

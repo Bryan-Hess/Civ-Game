@@ -16,15 +16,15 @@ public class TestEpsilonCiv {
     private Game game;
     private StubAttackDiceRoll stubAttackDiceRoll;
     private StubDefenseDiceRoll stubDefenseDiceRoll;
+    private Position redSettlerStart,blueLegionStart,redArcherStart;
 
     @Before
     public void setUp() {
         stubAttackDiceRoll = new StubAttackDiceRoll();
         stubDefenseDiceRoll = new StubDefenseDiceRoll();
+        
         game = new GameImpl(GameConstants.EPSILONCIV, stubAttackDiceRoll, stubDefenseDiceRoll);
-        Position blueLegionStart = new Position(3,2);
-        Position redSettlerStart = new Position(4,3);
-        Position redArcherStart = new Position(2,0);
+
     }
 
     @Test
@@ -45,130 +45,105 @@ public class TestEpsilonCiv {
     }
 
     @Test
-    public void shouldGiveSum1ForBlueAtP5_5() {
+    public void shouldGiveSum0ForBlueAtP8_8() {
         AttackStrategyImpl attackStrategy = (AttackStrategyImpl) game.getAttackStrategy();
-        assertThat("Blue unit at (5,5) should get +1 support",
-                attackStrategy.getFriendlySupport(new Position(5, 5), game.getWorldLayout()), is(+1));
+        assertThat("Blue unit at (8,8) should get +0 support",
+                attackStrategy.getFriendlySupport(new Position(8, 8), game.getWorldLayout()), is(0));
     }
+
+    @Test
+    public void shouldGiveSum2ForRedAtP9_9() {
+        AttackStrategyImpl attackStrategy = (AttackStrategyImpl) game.getAttackStrategy();
+        assertThat("Red unit at (9,9) should get +2 support",
+                attackStrategy.getFriendlySupport(new Position(9, 9), game.getWorldLayout()), is(+2));
+    }
+
+    @Test
+    public void shouldGive1forPlains(){
+        AttackStrategyImpl attackStrategy = (AttackStrategyImpl) game.getAttackStrategy();
+        assertThat("unit at tile 9,9 is on plains, should get 1 for terrain factor",
+                attackStrategy.getTerrainFactor(new Position(9, 9), game.getWorldLayout()), is(+1));
+    }
+    @Test
+
+    public void shouldGiveAttackStrengthOf6atP9_9(){
+        assertThat(game, is(notNullValue()));
+        assertThat(game.getPlayerInTurn(), is(Player.RED));
+        AttackStrategyImpl attackStrategy = (AttackStrategyImpl) game.getAttackStrategy();
+        assertThat(attackStrategy.getAttackStrength(new Position(9,9), game.getWorldLayout()),is(+6));
+    }
+    @Test
+    public void shouldGiveDefensiveStrengthOf2atP8_8(){
+        assertThat(game, is(notNullValue()));
+        AttackStrategyImpl attackStrategy = (AttackStrategyImpl) game.getAttackStrategy();
+        assertThat(attackStrategy.getDefenseStrength(new Position(8,8), game.getWorldLayout()),is(+2));
+    }
+
+    @Test
+    public void testDiceRollOf5(){
+        stubAttackDiceRoll.setRoll(5);
+        assertThat(stubAttackDiceRoll.getRoll(),is(5));
+    }
+
+    @Test
+    public void testDiceRollof1(){
+        stubAttackDiceRoll.setRoll(1);
+        assertThat(stubAttackDiceRoll.getRoll(),is(1));
+    }
+
+    @Test
+    public void rollOf1ShouldLose(){
+        stubAttackDiceRoll.setRoll(1);
+        stubDefenseDiceRoll.setRoll(5);
+
+        assertThat(game.moveUnit(new Position(9,9),new Position(8,8)),is(false));
+
+    }
+    @Test
+    public void rollOf6ShouldWin(){
+        stubAttackDiceRoll.setRoll(6);
+        stubDefenseDiceRoll.setRoll(1);
+
+        assertThat(game.moveUnit(new Position(9,9),new Position(8,8)),is(true));
+        assertThat(game.getUnitAt(new Position(8,8)).getOwner(),is(Player.RED));
+    }
+
+    @Test
+    public void win3toWin(){
+        stubAttackDiceRoll.setRoll(6);
+        stubDefenseDiceRoll.setRoll(1);
+
+        assertThat(game.moveUnit(new Position(9,9),new Position(8,8)),is(true));
+        assertThat(game.getUnitAt(new Position(8,8)).getOwner(),is(Player.RED));
+        game.endOfTurn();
+        game.endOfTurn();
+        assertThat(game.moveUnit(new Position(2,0),new Position(3,1)),is(true));
+        game.endOfTurn();
+        game.endOfTurn();
+        assertThat(game.moveUnit(new Position(3,1),new Position(3,2)),is(true));
+        assertThat(game.getUnitAt(new Position(3,2)).getOwner(),is(Player.RED));
+        game.endOfTurn();
+        game.endOfTurn();
+        assertThat(game.moveUnit(new Position(3,2),new Position(3,3)),is(true));
+
+        game.endOfTurn();
+        game.endOfTurn();
+        assertThat(game.moveUnit(new Position(3,3),new Position(4,4)),is(true));
+
+        assertThat(game.getWinner(), is(Player.RED));
+    }
+
+    @Test
+    public void ifTheDefenderWinsTheAttackerShouldBeRemoved() {
+        assertThat(game, is(notNullValue()));
+        assertThat(game.getPlayerInTurn(), is(Player.RED));
+        assertThat(game.moveUnit(new Position(4,3),new Position(3,2)),is(false));
+        //game.moveUnit(redSettlerStart, blueLegionStart);
+        assertThat(game.getUnitAt(new Position(3,2)).getTypeString(), is(GameConstants.LEGION));
+        assertThat(game.getUnitAt(new Position(4,3)),is(nullValue()));
+    }
+
+
+
 }
-
-
-class StubTile implements Tile {
-    private String type;
-    public StubTile(String type, int r, int c) { this.type = type; }
-    public String getTypeString() { return type; }
-}
-
-class StubUnit implements Unit {
-    private String type; private Player owner;
-    public StubUnit(String type, Player owner) {
-        this.type = type; this.owner = owner;
-    }
-    public String getTypeString() { return type; }
-    public Player getOwner() { return owner; }
-    public int getMoveCount() { return 0; }
-    public int getDefensiveStrength() { return 0; }
-    public int getAttackingStrength() { return 0; }
-
-    public void countMove(){
-
-    }
-
-    public void setDefensiveStrength(int def) {
-
-    }
-
-    public void setAttackingStrength(int att) {
-
-    }
-
-    public void resetMoveCount() {
-
-    }
-
-    public void setkeepMoveToZero(boolean flag) {}
-
-    public boolean getkeepMoveToZero() { return false;
-    }
-}
-
-
-/** A test stub for testing the battle calculation methods in
- * Utility. The terrains are
- * 0,0 - forest;
- * 1,0 - hill;
- * 0,1 - plain;
- * 1,1 - city.
- *
- * Red has units on 2,3; 3,2; 3,3; blue one on 4,4
- */
-
-class GameStubForBattleTesting implements Game {
-    public Tile getTileAt(Position p) {
-        if ( p.getRow() == 0 && p.getColumn() == 0 ) {
-            return new StubTile(GameConstants.FOREST, 0, 0);
-        }
-        if ( p.getRow() == 1 && p.getColumn() == 0 ) {
-            return new StubTile(GameConstants.HILLS, 1, 0);
-        }
-        return new StubTile(GameConstants.PLAINS, 0, 1);
-    }
-    public Unit getUnitAt(Position p) {
-        if ( p.getRow() == 2 && p.getColumn() == 3 ||
-                p.getRow() == 3 && p.getColumn() == 2 ||
-                p.getRow() == 3 && p.getColumn() == 3 ) {
-            return new StubUnit(GameConstants.ARCHER, Player.RED);
-        }
-        if ( p.getRow() == 4 && p.getColumn() == 4 ) {
-            return new StubUnit(GameConstants.ARCHER, Player.BLUE);
-        }
-        return null;
-    }
-    public City getCityAt(Position p) {
-        if ( p.getRow() == 1 && p.getColumn() == 1 ) {
-            return new City() {
-                public Player getOwner() { return Player.RED; }
-                public int getSize() { return 1; }
-                public int getTreasury() {
-                    return 0;
-                }
-                public String getProduction() {
-                    return null;
-                }
-                public String getWorkforceFocus() {
-                    return null;
-                }
-
-                public void setProduction(String prod){}
-
-                /** set treasury in this city.
-                 * @int amount: amount of production to be added or removed from the treasury
-                 */
-                public void setTreasury(int amount){}
-            };
-        }
-        return null;
-    }
-
-    // the rest is unused test stub methods...
-    public void changeProductionInCityAt(Position p, String unitType) {}
-    public void changeWorkForceFocusInCityAt(Position p, String balance) {}
-    public void endOfTurn() {}
-    public Player getPlayerInTurn() {return null;}
-    public Player getWinner() {return null;}
-    public int getAge() { return 0; }
-    public boolean moveUnit(Position from, Position to) {return false;}
-    public void performUnitActionAt( Position p ) {}
-
-        @Override
-        public Object getAttackStrategy() {
-            return null;
-        }
-
-        @Override
-        public WorldLayout getWorldLayout() {
-            return null;
-        }
-
-    }
 

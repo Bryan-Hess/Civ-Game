@@ -109,6 +109,7 @@ public class GameImpl implements Game {
   //Unit moving algorithm
   public boolean moveUnit( Position from, Position to ) {
     //If trying to move a unit not owned by the player
+
     if(worldLayout.getUnitAt(from).getOwner() != currentPlayer){
       return false;
     }
@@ -134,8 +135,9 @@ public class GameImpl implements Game {
 
     //If the target tile has a unit owned by a differnt player (PVP COMBAT)
     if(worldLayout.getUnitAt(to)!=null){
-        pvpCombat(from, to);
-        return true;
+        boolean retVal;
+        retVal = pvpCombat(from, to);
+        return retVal;
     }
 
     //If unit moving onto an enemy city
@@ -152,7 +154,7 @@ public class GameImpl implements Game {
     worldLayout.getUnitAt(to).countMove();
     return true;
   }
-  public void pvpCombat( Position from, Position to ) {
+  public boolean pvpCombat( Position from, Position to ) {
       //In future iterations, we will compare attacking/defending strength.
       //For this iteration, we do not need to compare stats, because the attacker always wins
       //worldLayout.removeUnitAt(to);
@@ -161,7 +163,7 @@ public class GameImpl implements Game {
       //worldLayout.getUnitAt(to).countMove();
       boolean retVale;
       retVale = attackStrategy.attackUnit(from, to, worldLayout);
-
+      return retVale;
   }
 
   public void endOfTurn() {
