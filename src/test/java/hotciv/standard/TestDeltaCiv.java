@@ -10,9 +10,13 @@ public class TestDeltaCiv {
 
     private Game game;
 
+    private StubAttackDiceRoll stubAttackDiceRoll;
+    private StubDefenseDiceRoll stubDefenseDiceRoll;
     @Before
     public void setUp() {
-        game = new GameImpl(GameConstants.DELTACIV);
+        stubAttackDiceRoll = new StubAttackDiceRoll();
+        stubDefenseDiceRoll = new StubDefenseDiceRoll();
+        game = new GameImpl(GameConstants.DELTACIV,stubAttackDiceRoll,stubDefenseDiceRoll);
     }
 
     @Test

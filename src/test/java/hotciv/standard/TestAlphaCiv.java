@@ -33,10 +33,15 @@ import static org.hamcrest.CoreMatchers.*;
 public class TestAlphaCiv {
   private Game game;
 
+  private StubAttackDiceRoll stubAttackDiceRoll;
+  private StubDefenseDiceRoll stubDefenseDiceRoll;
+
   /** Fixture for alphaciv testing. */
   @Before
   public void setUp() {
-    game = new GameImpl(GameConstants.ALPHACIV);
+    stubAttackDiceRoll = new StubAttackDiceRoll();
+    stubDefenseDiceRoll = new StubDefenseDiceRoll();
+    game = new GameImpl(GameConstants.ALPHACIV,stubAttackDiceRoll,stubDefenseDiceRoll);
   }
 
   // FRS p. 455 states that 'Red is the first player to take a turn'.

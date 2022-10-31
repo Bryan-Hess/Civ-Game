@@ -56,15 +56,22 @@ public class GameImpl implements Game {
   public void setSettlerActionVariation(String civVar){
     settlerAction = new SettlerActionImpl(civVar);
   }
-  public void setAttackStrategyVariation(String civVar){
-        attackStrategy = new AttackStrategyImpl(civVar);
+  public void setAttackStrategyVariation(String civVar, DiceRoll attackRoll, DiceRoll defenseRoll){
+        attackStrategy = new AttackStrategyImpl(civVar,attackRoll,defenseRoll);
     }
+  public AttackStrategy getAttackStrategy() {
+      return attackStrategy;
+  }
   public void setWorldLayoutVariation(String civVar){
     worldLayout = new WorldLayoutImpl(civVar);
     worldLayout.implementWorldLayout();
   }
 
-  public GameImpl( String civVar){
+  public WorldLayout getWorldLayout() {
+        return worldLayout;
+    }
+
+  public GameImpl( String civVar,DiceRoll attackRoll, DiceRoll defenseRoll){
 
     setWorldLayoutVariation(civVar);
     //Sets the implementations based on the Civ variant
@@ -72,7 +79,7 @@ public class GameImpl implements Game {
     setDecideWinnerVariation(civVar);
     setArcherActionVariation(civVar);
     setSettlerActionVariation(civVar);
-    setAttackStrategyVariation(civVar);
+    setAttackStrategyVariation(civVar, attackRoll,defenseRoll);
     //Game starts on Red player in year 4000BC
     currentPlayer = Player.RED;
     currentAge = -4000;

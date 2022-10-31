@@ -1,26 +1,32 @@
 package hotciv.standard;
 
-import hotciv.framework.AttackStrategy;
-import hotciv.framework.GameConstants;
-import hotciv.framework.Position;
-import hotciv.framework.WorldLayout;
+import hotciv.framework.*;
 import hotciv.standard.GameImpl;
 
 import static java.util.Objects.isNull;
 
 public class AttackStrategyImpl implements AttackStrategy {
     String civVariation;
+    private DiceRoll attackRoll;
+    private DiceRoll defenseRoll;
 
-    public AttackStrategyImpl (String civVariationIN) {
+    public AttackStrategyImpl (String civVariationIN, DiceRoll attackRoll2, DiceRoll defenseRoll2) {
         civVariation = civVariationIN;
+        attackRoll = attackRoll2;
+        defenseRoll = defenseRoll2;
     }
+
 
     public boolean attackUnit(Position from, Position to, WorldLayout worldLayout) {
         if(civVariation.equals(GameConstants.EPSILONCIV)) {
             int defender_strength = (worldLayout.getUnitAt(to).getDefensiveStrength() + getFriendlySupport(to, worldLayout)) * getTerrainFactor(to, worldLayout);
             int attacker_strength = (worldLayout.getUnitAt(from).getAttackingStrength() + getFriendlySupport(from, worldLayout)) * getTerrainFactor(from, worldLayout);
 
-            if(attacker_strength > defender_strength) {
+            int attackPower = attackRoll.getRoll();
+            int defensePower = defenseRoll.getRoll();
+
+
+            if(attacker_strength*attackPower > defender_strength*defensePower) {
                 processSuccessfulAttack(from, to, worldLayout);
                 return true;
             }
@@ -44,7 +50,7 @@ public class AttackStrategyImpl implements AttackStrategy {
 
     }
 
-    private int getFriendlySupport(Position p, WorldLayout worldLayout) {
+    public int getFriendlySupport(Position p, WorldLayout worldLayout) {
         //create iteration bounds "around" the city
         int[] rowChange = new int[]{-1, -1, 0, +1, +1, +1, 0, -1};
         int[] columnChange = new int[]{0, +1, +1, +1, 0, -1, -1, -1};
@@ -68,7 +74,10 @@ public class AttackStrategyImpl implements AttackStrategy {
         return supporting;
     }
 
-    private int getTerrainFactor(Position p, WorldLayout worldLayout) {
+    public int getTerrainFactor(Position p, WorldLayout worldLayout) {
+
+        if(worldLayout.getCityAt(p) != null)
+            return 3;
 
         switch (worldLayout.getTileAt(p).getTypeString()){
             case GameConstants.HILLS:
@@ -77,8 +86,7 @@ public class AttackStrategyImpl implements AttackStrategy {
                 return 2;
         }
 
-        if(worldLayout.getCityAt(p) != null)
-            return 3;
+
 
         return 1;
     }

@@ -9,10 +9,14 @@ import static org.hamcrest.CoreMatchers.*;
 public class TestBetaCiv {
 
     private Game game;
+    private StubAttackDiceRoll stubAttackDiceRoll;
+    private StubDefenseDiceRoll stubDefenseDiceRoll;
 
     @Before
     public void setUp() {
-        game = new GameImpl(GameConstants.BETACIV);
+        stubAttackDiceRoll = new StubAttackDiceRoll();
+        stubDefenseDiceRoll = new StubDefenseDiceRoll();
+        game = new GameImpl(GameConstants.BETACIV,stubAttackDiceRoll,stubDefenseDiceRoll);
     }
 
     @Test
