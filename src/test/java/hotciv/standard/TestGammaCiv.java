@@ -10,16 +10,20 @@ public class TestGammaCiv {
 
     private Game game;
 
+    private StubAttackDiceRoll stubAttackDiceRoll;
+    private StubDefenseDiceRoll stubDefenseDiceRoll;
+
     @Before
     public void setUp() {
-        game = new GameImpl(GameConstants.GAMMACIV);
+        stubAttackDiceRoll = new StubAttackDiceRoll();
+        stubDefenseDiceRoll = new StubDefenseDiceRoll();
+        game = new GameImpl(GameConstants.GAMMACIV,stubAttackDiceRoll,stubDefenseDiceRoll);
 
     }
     //This tests a proper Settler action according to the Gamma Civ requirements
     //The settler turns into a city owned by the same player
     @Test
     public void testSettlerAction(){
-
         assertThat(game, is(notNullValue()));
         assertThat(game.getUnitAt(new Position(4,3)).getTypeString(), is(GameConstants.SETTLER));
         assertThat(game.getCityAt(new Position(4,3)), is(nullValue()));

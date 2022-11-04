@@ -11,6 +11,7 @@ public class WorldLayoutImpl implements WorldLayout {
 
     String civVariation;
 
+    int round=0;
 
 
     //Hashmaps for tiles, units, cities, and arraylist of cities
@@ -21,15 +22,23 @@ public class WorldLayoutImpl implements WorldLayout {
     public Map<Position, Unit> unitMap = new HashMap<>();
     public Map<Position, City> cityMap = new HashMap<>();
 
+    public Map<Player, Integer> winsMap = new HashMap<>();
+
    // public ArrayList<City> cityList = new ArrayList<>();
 
 
     public WorldLayoutImpl(String civVariationIN){
         civVariation = civVariationIN;
+        initializeWins();
     }
 
     public String[] layout;
-
+    private void initializeWins(){
+        winsMap.put(Player.RED,0);
+        winsMap.put(Player.BLUE,0);
+        winsMap.put(Player.GREEN,0);
+        winsMap.put(Player.YELLOW,0);
+    }
     //Initializes the world layout
     public void implementWorldLayout() {
         if(civVariation.equals(GameConstants.DELTACIV)){ //DeltaCiv's Map Layout
@@ -88,6 +97,14 @@ public class WorldLayoutImpl implements WorldLayout {
             unitMap.put(new Position(2, 0), new UnitImpl(Player.RED, GameConstants.ARCHER));
             unitMap.put(new Position(3, 2), new UnitImpl(Player.BLUE, GameConstants.LEGION));
             unitMap.put(new Position(4, 3), new UnitImpl(Player.RED, GameConstants.SETTLER));
+
+            if(civVariation.equals(GameConstants.EPSILONCIV)){
+                unitMap.put(new Position(4, 4), new UnitImpl(Player.BLUE, GameConstants.LEGION));
+                unitMap.put(new Position(8, 8), new UnitImpl(Player.BLUE, GameConstants.LEGION));
+                unitMap.put(new Position(8, 9), new UnitImpl(Player.RED, GameConstants.LEGION));
+                unitMap.put(new Position(9, 9), new UnitImpl(Player.RED, GameConstants.LEGION));
+                unitMap.put(new Position(9, 10), new UnitImpl(Player.RED, GameConstants.LEGION));
+            }
         }
                 // Basically we use a 'data driven' approach - code the
                 // layout in a simple semi-visual representation, and
@@ -167,5 +184,29 @@ public class WorldLayoutImpl implements WorldLayout {
         return cityMap.values();
     }
 
+    public void addWin(Player player){
+        int z = getWins(player);
+        winsMap.put(player, z+1);
+    }
+
+    public int getWins(Player player){
+
+        return winsMap.get(player);
+    }
+
+    public void resetWins(){
+        winsMap.put(Player.RED, 0);
+        winsMap.put(Player.BLUE, 0);
+        winsMap.put(Player.GREEN, 0);
+        winsMap.put(Player.YELLOW, 0);
+    }
+
+    public int getRound(){
+        return round;
+    }
+
+    public void incrimentRound(){
+        round++;
+    }
 }
 

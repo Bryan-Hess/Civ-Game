@@ -2,8 +2,6 @@ package hotciv.standard;
 
 import hotciv.framework.*;
 
-import java.net.SocketOption;
-
 /** Skeleton implementation of HotCiv.
  
    This source code is from the book 
@@ -42,7 +40,7 @@ public class GameImpl implements Game {
   DecideWinnerImpl decideWinner;
   ArcherActionImpl archerAction;
   SettlerActionImpl settlerAction;
-
+  AttackStrategyImpl attackStrategy;
   WorldLayoutImpl worldLayout;
 
   //Declares the implementations based on the Civ variant
@@ -58,12 +56,22 @@ public class GameImpl implements Game {
   public void setSettlerActionVariation(String civVar){
     settlerAction = new SettlerActionImpl(civVar);
   }
+  public void setAttackStrategyVariation(String civVar, DiceRoll attackRoll, DiceRoll defenseRoll){
+        attackStrategy = new AttackStrategyImpl(civVar,attackRoll,defenseRoll);
+    }
+  public AttackStrategy getAttackStrategy() {
+      return attackStrategy;
+  }
   public void setWorldLayoutVariation(String civVar){
     worldLayout = new WorldLayoutImpl(civVar);
     worldLayout.implementWorldLayout();
   }
 
-  public GameImpl( String civVar){
+  public WorldLayout getWorldLayout() {
+        return worldLayout;
+    }
+
+  public GameImpl( String civVar,DiceRoll attackRoll, DiceRoll defenseRoll){
 
     setWorldLayoutVariation(civVar);
     //Sets the implementations based on the Civ variant
@@ -71,6 +79,7 @@ public class GameImpl implements Game {
     setDecideWinnerVariation(civVar);
     setArcherActionVariation(civVar);
     setSettlerActionVariation(civVar);
+    setAttackStrategyVariation(civVar, attackRoll,defenseRoll);
     //Game starts on Red player in year 4000BC
     currentPlayer = Player.RED;
     currentAge = -4000;
@@ -100,6 +109,7 @@ public class GameImpl implements Game {
   //Unit moving algorithm
   public boolean moveUnit( Position from, Position to ) {
     //If trying to move a unit not owned by the player
+
     if(worldLayout.getUnitAt(from).getOwner() != currentPlayer){
       return false;
     }
@@ -125,8 +135,9 @@ public class GameImpl implements Game {
 
     //If the target tile has a unit owned by a differnt player (PVP COMBAT)
     if(worldLayout.getUnitAt(to)!=null){
-        pvpCombat(from, to);
-        return true;
+        boolean retVal;
+        retVal = pvpCombat(from, to);
+        return retVal;
     }
 
     //If unit moving onto an enemy city
@@ -143,13 +154,16 @@ public class GameImpl implements Game {
     worldLayout.getUnitAt(to).countMove();
     return true;
   }
-  public void pvpCombat( Position from, Position to ) {
+  public boolean pvpCombat( Position from, Position to ) {
       //In future iterations, we will compare attacking/defending strength.
       //For this iteration, we do not need to compare stats, because the attacker always wins
-      worldLayout.removeUnitAt(to);
-      worldLayout.moveUnitTo(to,from);
-      worldLayout.removeUnitAt(from);
-      worldLayout.getUnitAt(to).countMove();
+      //worldLayout.removeUnitAt(to);
+      //worldLayout.moveUnitTo(to,from);
+      //worldLayout.removeUnitAt(from);
+      //worldLayout.getUnitAt(to).countMove();
+      boolean retVale;
+      retVale = attackStrategy.attackUnit(from, to, worldLayout);
+      return retVale;
   }
 
   public void endOfTurn() {
@@ -176,6 +190,7 @@ public class GameImpl implements Game {
               }
           }
       }
+      worldLayout.incrimentRound();
   }
 
   public void changeWorkForceFocusInCityAt( Position p, String balance ) {}
