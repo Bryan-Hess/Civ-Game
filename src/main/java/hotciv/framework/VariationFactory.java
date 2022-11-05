@@ -7,5 +7,5 @@ public interface VariationFactory {
     public AttackStrategy createAttackStrategy();
     public DecideWinner createDecideWinnerStrategy();
     public WorldLayout createWorldLayoutStrategy();
-
+    public UFOAction createUFOActionStrategy();
 }

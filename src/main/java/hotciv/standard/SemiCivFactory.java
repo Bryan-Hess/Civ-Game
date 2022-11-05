@@ -18,5 +18,5 @@ public class SemiCivFactory implements VariationFactory {
         return new AttackStrategyImpl(GameConstants.EPSILONCIV, attackRoll, defenseRoll);
     }
     public WorldLayout createWorldLayoutStrategy(){ return new WorldLayoutImpl(GameConstants.DELTACIV); }
-
+    public UFOAction createUFOActionStrategy(){ return new UFOActionImpl(GameConstants.ALPHACIV); } ;
 }
