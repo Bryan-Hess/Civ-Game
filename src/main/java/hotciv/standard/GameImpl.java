@@ -38,6 +38,8 @@ public class GameImpl implements Game {
     private DecideWinner decideWinner;
     private ArcherAction archerAction;
     private SettlerAction settlerAction;
+
+    private UFOAction ufoAction;
     private AttackStrategy attackStrategy;
     private WorldLayout worldLayout;
     private VariationFactory factory;
@@ -78,6 +80,7 @@ public class GameImpl implements Game {
         //Sets the implementations based on the Civ variant
         this.settlerAction = factory.createSettlerActionStrategy();
         this.archerAction = factory.createArcherActionStrategy();
+        this.ufoAction = factory.createUFOActionStrategy();
         this.attackStrategy = factory.createAttackStrategy();
         this.WorldAging = factory.createWorldAgingStrategy();
         this.decideWinner = factory.createDecideWinnerStrategy();
@@ -209,10 +212,13 @@ public class GameImpl implements Game {
         }
     }
     public void performUnitActionAt( Position p ) {
-        if(worldLayout.getUnitAt(p).getTypeString().equals(GameConstants.SETTLER)) {
+        String currUnitTypeString = worldLayout.getUnitAt(p).getTypeString();
+        if(currUnitTypeString.equals(GameConstants.SETTLER)) {
             settlerAction.buildCity(p, worldLayout);
-        } else if (worldLayout.getUnitAt(p).getTypeString().equals(GameConstants.ARCHER)) {
+        }else if (currUnitTypeString.equals(GameConstants.ARCHER)) {
             archerAction.fortify(p, worldLayout);
+        }else if (currUnitTypeString.equals(GameConstants.UFO)){
+            ufoAction.abduct(p, worldLayout);
         }
     
     }
