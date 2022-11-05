@@ -19,7 +19,7 @@ public class TestZetaCiv {
     public void setUp() {
         stubAttackDiceRoll = new StubAttackDiceRoll();
         stubDefenseDiceRoll = new StubDefenseDiceRoll();
-        game = new GameImpl(GameConstants.ZETACIV,stubAttackDiceRoll,stubDefenseDiceRoll);
+        game = new GameImpl(new ZetaCivFactory());
     }
 
     @Test

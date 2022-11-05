@@ -16,7 +16,7 @@ public class TestDeltaCiv {
     public void setUp() {
         stubAttackDiceRoll = new StubAttackDiceRoll();
         stubDefenseDiceRoll = new StubDefenseDiceRoll();
-        game = new GameImpl(GameConstants.DELTACIV,stubAttackDiceRoll,stubDefenseDiceRoll);
+        game = new GameImpl(new DeltaCivFactory());
     }
 
     @Test

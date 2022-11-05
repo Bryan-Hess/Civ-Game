@@ -23,7 +23,7 @@ public class TestEpsilonCiv {
         stubAttackDiceRoll = new StubAttackDiceRoll();
         stubDefenseDiceRoll = new StubDefenseDiceRoll();
         
-        game = new GameImpl(GameConstants.EPSILONCIV, stubAttackDiceRoll, stubDefenseDiceRoll);
+        game = new GameImpl(new EpsilonCivFactory(stubAttackDiceRoll,stubDefenseDiceRoll));
 
     }
 

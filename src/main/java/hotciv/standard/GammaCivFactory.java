@@ -6,9 +6,9 @@ public class GammaCivFactory implements VariationFactory {
 
     public WorldAging createWorldAgingStrategy(){ return new WorldAgingImpl(GameConstants.ALPHACIV); }
 
-    public ArcherAction createArcherActionStrategy(){ return new ArcherActionImpl(GameConstants.DELTACIV); }
+    public ArcherAction createArcherActionStrategy(){ return new ArcherActionImpl(GameConstants.GAMMACIV); }
 
-    public SettlerAction createSettlerActionStrategy(){ return new SettlerActionImpl(GameConstants.DELTACIV); }
+    public SettlerAction createSettlerActionStrategy(){ return new SettlerActionImpl(GameConstants.GAMMACIV); }
 
     public AttackStrategy createAttackStrategy(){
         DiceRoll attackRoll = new DiceRollImpl();

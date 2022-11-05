@@ -36,12 +36,14 @@ public class GameImpl implements Game {
   public int currentAge;
 
   //Declaration of implementations
-  WorldAgingImpl WorldAging;
-  DecideWinnerImpl decideWinner;
-  ArcherActionImpl archerAction;
-  SettlerActionImpl settlerAction;
-  AttackStrategyImpl attackStrategy;
-  WorldLayoutImpl worldLayout;
+  private WorldAging WorldAging;
+  private DecideWinner decideWinner;
+  private ArcherAction archerAction;
+  private SettlerAction settlerAction;
+  private AttackStrategy attackStrategy;
+  private WorldLayout worldLayout;
+
+  private VariationFactory factory;
 
   //Declares the implementations based on the Civ variant
   public void setWorldAgingVariation(String civVar){
@@ -71,15 +73,23 @@ public class GameImpl implements Game {
         return worldLayout;
     }
 
-  public GameImpl( String civVar,DiceRoll attackRoll, DiceRoll defenseRoll){
+  public GameImpl( VariationFactory factory2){
 
-    setWorldLayoutVariation(civVar);
+    this.factory = factory2;
+    this.worldLayout = factory.createWorldLayoutStrategy();
+    this.worldLayout.implementWorldLayout();
+    // setWorldLayoutVariation(civVar);
     //Sets the implementations based on the Civ variant
-    setWorldAgingVariation(civVar);
-    setDecideWinnerVariation(civVar);
-    setArcherActionVariation(civVar);
-    setSettlerActionVariation(civVar);
-    setAttackStrategyVariation(civVar, attackRoll,defenseRoll);
+    this.settlerAction = factory.createSettlerActionStrategy();
+    this.archerAction = factory.createArcherActionStrategy();
+    this.attackStrategy = factory.createAttackStrategy();
+    this.WorldAging = factory.createWorldAgingStrategy();
+    this.decideWinner = factory.createDecideWinnerStrategy();
+    //setWorldAgingVariation(civVar);
+    //setDecideWinnerVariation(civVar);
+    //setArcherActionVariation(civVar);
+    //setSettlerActionVariation(civVar);
+    //setAttackStrategyVariation(civVar, attackRoll,defenseRoll);
     //Game starts on Red player in year 4000BC
     currentPlayer = Player.RED;
     currentAge = -4000;

@@ -17,7 +17,7 @@ public class TestGammaCiv {
     public void setUp() {
         stubAttackDiceRoll = new StubAttackDiceRoll();
         stubDefenseDiceRoll = new StubDefenseDiceRoll();
-        game = new GameImpl(GameConstants.GAMMACIV,stubAttackDiceRoll,stubDefenseDiceRoll);
+        game = new GameImpl(new GammaCivFactory());
 
     }
     //This tests a proper Settler action according to the Gamma Civ requirements

@@ -3,6 +3,12 @@ package hotciv.standard;
 import hotciv.framework.*;
 
 public class EpsilonCivFactory implements VariationFactory {
+    private DiceRoll attackRoll;
+    private DiceRoll defenseRoll;
+    public EpsilonCivFactory(DiceRoll aR, DiceRoll dR){
+        attackRoll = aR;
+        defenseRoll = dR;
+    }
 
     public WorldAging createWorldAgingStrategy(){ return new WorldAgingImpl(GameConstants.ALPHACIV); }
 
@@ -11,13 +17,11 @@ public class EpsilonCivFactory implements VariationFactory {
     public SettlerAction createSettlerActionStrategy(){ return new SettlerActionImpl(GameConstants.ALPHACIV); }
 
     public AttackStrategy createAttackStrategy(){
-        DiceRoll attackRoll = new DiceRollImpl();
-        DiceRoll defenseRoll = new DiceRollImpl();
         return new AttackStrategyImpl(GameConstants.EPSILONCIV, attackRoll, defenseRoll);
     }
 
     public DecideWinner createDecideWinnerStrategy(){ return new DecideWinnerImpl(GameConstants.EPSILONCIV); }
 
-    public WorldLayout createWorldLayoutStrategy(){ return new WorldLayoutImpl(GameConstants.ALPHACIV); }
+    public WorldLayout createWorldLayoutStrategy(){ return new WorldLayoutImpl(GameConstants.EPSILONCIV); }
 
 }
