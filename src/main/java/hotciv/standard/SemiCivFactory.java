@@ -4,6 +4,13 @@ import hotciv.framework.*;
 
 public class SemiCivFactory implements VariationFactory {
 
+    private DiceRoll attackRoll;
+    private DiceRoll defenseRoll;
+    public SemiCivFactory(DiceRoll aR, DiceRoll dR){
+        attackRoll = aR;
+        defenseRoll = dR;
+    }
+
     public WorldAging createWorldAgingStrategy(){ return new WorldAgingImpl(GameConstants.BETACIV); }
 
     public ArcherAction createArcherActionStrategy(){ return new ArcherActionImpl(GameConstants.GAMMACIV); }
@@ -11,8 +18,7 @@ public class SemiCivFactory implements VariationFactory {
     public SettlerAction createSettlerActionStrategy(){ return new SettlerActionImpl(GameConstants.GAMMACIV); }
 
     public AttackStrategy createAttackStrategy(){
-        DiceRoll attackRoll = new DiceRollImpl();
-        DiceRoll defenseRoll = new DiceRollImpl();
+
         return new AttackStrategyImpl(GameConstants.EPSILONCIV, attackRoll, defenseRoll);
     }
 
