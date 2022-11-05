@@ -143,7 +143,5 @@ public class TestEpsilonCiv {
         assertThat(game.getUnitAt(new Position(4,3)),is(nullValue()));
     }
 
-
-
 }
 

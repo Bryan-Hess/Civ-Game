@@ -296,5 +296,9 @@ public class GameImpl implements Game {
         return null;
     }
 
+    public void addUnitGameLevel(Position p, Player name, String unitType){
+        worldLayout.addUnitAt(p,name,unitType);
+    }
 }
+
 

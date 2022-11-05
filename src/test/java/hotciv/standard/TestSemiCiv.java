@@ -145,5 +145,61 @@ public class TestSemiCiv {
         assertThat(stubAttackDiceRoll.getRoll(),is(1));
     }
 
-    // TODO - tests for winning, tests for attacking
+    @Test
+    public void win3toWin(){
+        assertThat(game, is(notNullValue()));
+        stubAttackDiceRoll.setRoll(6);
+        stubDefenseDiceRoll.setRoll(1);
+
+        //Win 1
+        game.addUnitGameLevel((new Position(8,0)),Player.RED,GameConstants.LEGION);
+        game.addUnitGameLevel((new Position(8,1)),Player.BLUE,GameConstants.SETTLER);
+        assertThat(game.getUnitAt(new Position(8,0)).getTypeString(), is(GameConstants.LEGION));
+        assertThat(game.getUnitAt(new Position(8,1)).getTypeString(), is(GameConstants.SETTLER));
+        assertThat(game.moveUnit(new Position(8,0),new Position(8,1)),is(true));
+        assertThat(game.getUnitAt(new Position(8,1)).getTypeString(), is(GameConstants.LEGION));
+        assertThat(game.getWinner(), is(nullValue()));
+        //Win 2
+        game.addUnitGameLevel((new Position(8,2)),Player.BLUE,GameConstants.SETTLER);
+        assertThat(game.getUnitAt(new Position(8,2)).getTypeString(), is(GameConstants.SETTLER));
+        game.endOfTurn();
+        game.endOfTurn();
+        assertThat(game.moveUnit(new Position(8,1),new Position(8,2)),is(true));
+        assertThat(game.getUnitAt(new Position(8,2)).getTypeString(), is(GameConstants.LEGION));
+        assertThat(game.getWinner(), is(nullValue()));
+        //Win 3
+        game.addUnitGameLevel((new Position(8,3)),Player.BLUE,GameConstants.SETTLER);
+        assertThat(game.getUnitAt(new Position(8,3)).getTypeString(), is(GameConstants.SETTLER));
+        game.endOfTurn();
+        game.endOfTurn();
+        assertThat(game.moveUnit(new Position(8,2),new Position(8,3)),is(true));
+        assertThat(game.getUnitAt(new Position(8,3)).getTypeString(), is(GameConstants.LEGION));
+        assertThat(game.getWinner(), is(Player.RED));
+    }
+
+    public void rollOf1ShouldLose(){
+        stubAttackDiceRoll.setRoll(1);
+        stubDefenseDiceRoll.setRoll(5);
+        game.addUnitGameLevel((new Position(8,8)),Player.BLUE,GameConstants.LEGION);
+        game.addUnitGameLevel((new Position(8,9)),Player.RED,GameConstants.LEGION);
+        game.addUnitGameLevel((new Position(9,9)),Player.RED,GameConstants.LEGION);
+        game.addUnitGameLevel((new Position(9,10)),Player.RED,GameConstants.LEGION);
+
+        assertThat(game.moveUnit(new Position(9,9),new Position(8,8)),is(false));
+        //Failed attacker is deleted
+        assertThat(game.getUnitAt(new Position(9,9)),is(nullValue()));
+    }
+    @Test
+    public void rollOf6ShouldWin(){
+        stubAttackDiceRoll.setRoll(6);
+        stubDefenseDiceRoll.setRoll(1);
+
+        game.addUnitGameLevel((new Position(8,8)),Player.BLUE,GameConstants.LEGION);
+        game.addUnitGameLevel((new Position(8,9)),Player.RED,GameConstants.LEGION);
+        game.addUnitGameLevel((new Position(9,9)),Player.RED,GameConstants.LEGION);
+        game.addUnitGameLevel((new Position(9,10)),Player.RED,GameConstants.LEGION);
+
+        assertThat(game.moveUnit(new Position(9,9),new Position(8,8)),is(true));
+        assertThat(game.getUnitAt(new Position(8,8)).getOwner(),is(Player.RED));
+    }
 }
