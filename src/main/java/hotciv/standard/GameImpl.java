@@ -30,195 +30,193 @@ import hotciv.framework.*;
 */
 
 public class GameImpl implements Game {
-
     //Declaration of all game variables
-  public Player currentPlayer;
-  public int currentAge;
+    public Player currentPlayer;
+    public int currentAge;
+    //Declaration of implementations
+    private WorldAging WorldAging;
+    private DecideWinner decideWinner;
+    private ArcherAction archerAction;
+    private SettlerAction settlerAction;
+    private AttackStrategy attackStrategy;
+    private WorldLayout worldLayout;
+    private VariationFactory factory;
 
-  //Declaration of implementations
-  private WorldAging WorldAging;
-  private DecideWinner decideWinner;
-  private ArcherAction archerAction;
-  private SettlerAction settlerAction;
-  private AttackStrategy attackStrategy;
-  private WorldLayout worldLayout;
-
-  private VariationFactory factory;
-
-  //Declares the implementations based on the Civ variant
-  public void setWorldAgingVariation(String civVar){
+    //Declares the implementations based on the Civ variant
+    public void setWorldAgingVariation(String civVar){
     WorldAging = new WorldAgingImpl(civVar);
   }
-  public void setDecideWinnerVariation(String civVar){
+    public void setDecideWinnerVariation(String civVar){
     decideWinner = new DecideWinnerImpl(civVar);
   }
-  public void setArcherActionVariation(String civVar){
+    public void setArcherActionVariation(String civVar){
     archerAction = new ArcherActionImpl(civVar);
   }
-  public void setSettlerActionVariation(String civVar){
+    public void setSettlerActionVariation(String civVar){
     settlerAction = new SettlerActionImpl(civVar);
   }
-  public void setAttackStrategyVariation(String civVar, DiceRoll attackRoll, DiceRoll defenseRoll){
+    public void setAttackStrategyVariation(String civVar, DiceRoll attackRoll, DiceRoll defenseRoll){
         attackStrategy = new AttackStrategyImpl(civVar,attackRoll,defenseRoll);
     }
-  public AttackStrategy getAttackStrategy() {
+    public AttackStrategy getAttackStrategy() {
       return attackStrategy;
   }
-  public void setWorldLayoutVariation(String civVar){
-    worldLayout = new WorldLayoutImpl(civVar);
-    worldLayout.implementWorldLayout();
-  }
+    public void setWorldLayoutVariation(String civVar){
+        worldLayout = new WorldLayoutImpl(civVar);
+        worldLayout.implementWorldLayout();
+    }
 
-  public WorldLayout getWorldLayout() {
+    public WorldLayout getWorldLayout() {
         return worldLayout;
     }
 
-  public GameImpl( VariationFactory factory2){
+    public GameImpl( VariationFactory factory2){
+        this.factory = factory2;
+        this.worldLayout = factory.createWorldLayoutStrategy();
+        this.worldLayout.implementWorldLayout();
+        // setWorldLayoutVariation(civVar);
+        //Sets the implementations based on the Civ variant
+        this.settlerAction = factory.createSettlerActionStrategy();
+        this.archerAction = factory.createArcherActionStrategy();
+        this.attackStrategy = factory.createAttackStrategy();
+        this.WorldAging = factory.createWorldAgingStrategy();
+        this.decideWinner = factory.createDecideWinnerStrategy();
+        //setWorldAgingVariation(civVar);
+        //setDecideWinnerVariation(civVar);
+        //setArcherActionVariation(civVar);
+        //setSettlerActionVariation(civVar);
+        //setAttackStrategyVariation(civVar, attackRoll,defenseRoll);
+        //Game starts on Red player in year 4000BC
+        currentPlayer = Player.RED;
+        currentAge = -4000;
+    }
 
-    this.factory = factory2;
-    this.worldLayout = factory.createWorldLayoutStrategy();
-    this.worldLayout.implementWorldLayout();
-    // setWorldLayoutVariation(civVar);
-    //Sets the implementations based on the Civ variant
-    this.settlerAction = factory.createSettlerActionStrategy();
-    this.archerAction = factory.createArcherActionStrategy();
-    this.attackStrategy = factory.createAttackStrategy();
-    this.WorldAging = factory.createWorldAgingStrategy();
-    this.decideWinner = factory.createDecideWinnerStrategy();
-    //setWorldAgingVariation(civVar);
-    //setDecideWinnerVariation(civVar);
-    //setArcherActionVariation(civVar);
-    //setSettlerActionVariation(civVar);
-    //setAttackStrategyVariation(civVar, attackRoll,defenseRoll);
-    //Game starts on Red player in year 4000BC
-    currentPlayer = Player.RED;
-    currentAge = -4000;
-  }
-
-  //Getters for tiles/units/cities/player
-  public Tile getTileAt( Position p ) {
+    //Getters for tiles/units/cities/player
+    public Tile getTileAt( Position p ) {
     return worldLayout.getTileAt(p);
   }
-  public Unit getUnitAt( Position p ) {
+    public Unit getUnitAt( Position p ) {
     return worldLayout.getUnitAt(p);
   }
-  public City getCityAt( Position p ) {
+    public City getCityAt( Position p ) {
     return worldLayout.getCityAt(p);
   }
-  public Player getPlayerInTurn() {
+    public Player getPlayerInTurn() {
     return currentPlayer;
   }
-  public Player getWinner() {
-      return decideWinner.getWinner(currentAge,worldLayout);
+    public Player getWinner() {
+        return decideWinner.getWinner(currentAge,worldLayout);
 
-  }
-  public int getAge() {
+    }
+    public int getAge() {
     return currentAge;
   }
 
   //Unit moving algorithm
-  public boolean moveUnit( Position from, Position to ) {
-    //If trying to move a unit not owned by the player
+    public boolean moveUnit( Position from, Position to ) {
+        //If trying to move a unit not owned by the player
 
-    if(worldLayout.getUnitAt(from).getOwner() != currentPlayer){
-      return false;
-    }
-    //if trying to move onto an ocean or mountain tile
-    if(worldLayout.getTileAt(to).getTypeString().equals(GameConstants.OCEANS) || worldLayout.getTileAt(to).getTypeString().equals(GameConstants.MOUNTAINS)){
-      return false;
-    }
-    //If trying to move an invalid distance
-    if(java.lang.Math.abs(to.getRow()-from.getRow())>1 || java.lang.Math.abs(to.getColumn()-from.getColumn())>1){
-      return false;
-    }
-
-    //If unit has no valid moves
-    if(0 >= worldLayout.getUnitAt(from).getMoveCount()){
-        return false;
-    }
-
-    //If the target tile has a unit owned by the same player
-    if(worldLayout.getUnitAt(to)!=null&&currentPlayer.equals(worldLayout.getUnitAt(to).getOwner())){
-
-        return false; //if the player tries to move their unit on a tile that already has one of their units
-    }
-
-    //If the target tile has a unit owned by a differnt player (PVP COMBAT)
-    if(worldLayout.getUnitAt(to)!=null){
-        boolean retVal;
-        retVal = pvpCombat(from, to);
-        return retVal;
-    }
-
-    //If unit moving onto an enemy city
-    if (worldLayout.getCityAt(to)!=null&&!currentPlayer.equals(worldLayout.getCityAt(to).getOwner())) {
-        //Removes the city and places a new one, if requirements change down the line will need to add setter/getter for city ownership to cityImpl
-        worldLayout.removeCityAt(to);
-        worldLayout.addCityAt(to, currentPlayer);
-    }
-
-
-    //Default case, successfully move unit
-    worldLayout.moveUnitTo(to,from);
-    worldLayout.removeUnitAt(from);
-    worldLayout.getUnitAt(to).countMove();
-    return true;
-  }
-  public boolean pvpCombat( Position from, Position to ) {
-      //In future iterations, we will compare attacking/defending strength.
-      //For this iteration, we do not need to compare stats, because the attacker always wins
-      //worldLayout.removeUnitAt(to);
-      //worldLayout.moveUnitTo(to,from);
-      //worldLayout.removeUnitAt(from);
-      //worldLayout.getUnitAt(to).countMove();
-      boolean retVale;
-      retVale = attackStrategy.attackUnit(from, to, worldLayout);
-      return retVale;
-  }
-
-  public void endOfTurn() {
-      //Changes the age each turn
-      currentAge = WorldAging.incrementAge(currentAge);
-
-      //Changes player each turn
-      currentPlayer = switchPlayerTurn(currentPlayer);
-
-      //Resets move count for every unit
-      resetAllUnitMoveCount();
-
-      //Increments production for each city
-      incrementAllCityProduction();
-
-      //Checks production for all cities and produces the unit if treasury is sufficient
-      for(int i = 0; i < GameConstants.WORLDSIZE; i++){
-          for(int j = 0; j < GameConstants.WORLDSIZE; j++) {
-              if(isTreasurySufficientForUnit(i,j)){
-                  Player currentCityOwner = worldLayout.getCityAt(new Position(i,j)).getOwner();
-                  String currentCityProduction = worldLayout.getCityAt(new Position(i,j)).getProduction();
-                  Position emptyTile = findEmptyTileForCityUnitProduction(i,j);
-                  worldLayout.addUnitAt(emptyTile,currentCityOwner,currentCityProduction);
-              }
+        if(worldLayout.getUnitAt(from).getOwner() != currentPlayer){
+          return false;
+        }
+        //if trying to move onto an ocean or mountain tile
+        boolean currentTileOceans = worldLayout.getTileAt(to).getTypeString().equals(GameConstants.OCEANS);
+        boolean currentTileMountains = worldLayout.getTileAt(to).getTypeString().equals(GameConstants.MOUNTAINS);
+        if( currentTileOceans || currentTileMountains ){
+          if( getUnitAt(from).getPassThroughTerrain() ){
+              return true;
           }
+          return false;
+        }
+        //If trying to move an invalid distance
+        if(java.lang.Math.abs(to.getRow()-from.getRow())>1 || java.lang.Math.abs(to.getColumn()-from.getColumn())>1){
+          return false;
+        }
+
+        //If unit has no valid moves
+        if(0 >= worldLayout.getUnitAt(from).getMoveCount()){
+            return false;
+        }
+
+        //If the target tile has a unit owned by the same player
+        if(worldLayout.getUnitAt(to)!=null&&currentPlayer.equals(worldLayout.getUnitAt(to).getOwner())){
+            return false; //if the player tries to move their unit on a tile that already has one of their units
+        }
+
+        //If the target tile has a unit owned by a different player (PVP COMBAT)
+        if(worldLayout.getUnitAt(to)!=null){
+            boolean retVal;
+            retVal = pvpCombat(from, to);
+            return retVal;
+        }
+
+        //If unit moving onto an enemy city
+        if (worldLayout.getCityAt(to)!=null&&!currentPlayer.equals(worldLayout.getCityAt(to).getOwner())) {
+            //Removes the city and places a new one, if requirements change down the line will need to add setter/getter for city ownership to cityImpl
+            worldLayout.removeCityAt(to);
+            worldLayout.addCityAt(to, currentPlayer);
+        }
+
+        //Default case, successfully move unit
+        worldLayout.moveUnitTo(to,from);
+        worldLayout.removeUnitAt(from);
+        worldLayout.getUnitAt(to).countMove();
+        return true;
+    }
+    public boolean pvpCombat( Position from, Position to ) {
+        /*
+        In future iterations, we will compare attacking/defending strength.
+        For this iteration, we do not need to compare stats, because the attacker always wins
+        worldLayout.removeUnitAt(to);
+        worldLayout.moveUnitTo(to,from);
+        worldLayout.removeUnitAt(from);
+        worldLayout.getUnitAt(to).countMove();
+        */
+        boolean retVale;
+        retVale = attackStrategy.attackUnit(from, to, worldLayout);
+        return retVale;
+    }
+
+    public void endOfTurn() {
+        //Changes the age each turn
+        currentAge = WorldAging.incrementAge(currentAge);
+        //Changes player each turn
+        currentPlayer = switchPlayerTurn(currentPlayer);
+        //Resets move count for every unit
+        resetAllUnitMoveCount();
+        //Increments production for each city
+        incrementAllCityProduction();
+
+        //Checks production for all cities and produces the unit if treasury is sufficient
+        for(int i = 0; i < GameConstants.WORLDSIZE; i++){
+            for(int j = 0; j < GameConstants.WORLDSIZE; j++) {
+                if(isTreasurySufficientForUnit(i,j)){
+                    Player currentCityOwner = worldLayout.getCityAt(new Position(i,j)).getOwner();
+                    String currentCityProduction = worldLayout.getCityAt(new Position(i,j)).getProduction();
+                    Position emptyTile = findEmptyTileForCityUnitProduction(i,j);
+                    worldLayout.addUnitAt(emptyTile,currentCityOwner,currentCityProduction);
+                }
+            }
+        }
+        worldLayout.incrementRound();
       }
-      worldLayout.incrimentRound();
-  }
+    public void changeWorkForceFocusInCityAt( Position p, String balance ) {}
 
-  public void changeWorkForceFocusInCityAt( Position p, String balance ) {}
-
-  public void changeProductionInCityAt( Position p, String unitType ) {
-    //Sets city's production if a valid unit
-    if(unitType.equals(GameConstants.ARCHER)|unitType.equals(GameConstants.LEGION)|unitType.equals(GameConstants.SETTLER)) {
-      worldLayout.getCityAt(p).setProduction(unitType);
+    public void changeProductionInCityAt( Position p, String unitType ) {
+        //Sets city's production if a valid unit
+        if(unitType.equals(GameConstants.ARCHER)|unitType.equals(GameConstants.LEGION)|unitType.equals(GameConstants.SETTLER)) {
+        worldLayout.getCityAt(p).setProduction(unitType);
+        }
     }
-  }
-  public void performUnitActionAt( Position p ) {
-    if(worldLayout.getUnitAt(p).getTypeString().equals(GameConstants.SETTLER)) {
-        settlerAction.buildCity(p, worldLayout);
-    } else if (worldLayout.getUnitAt(p).getTypeString().equals(GameConstants.ARCHER)) {
-        archerAction.fortify(p, worldLayout);
-    }
+    public void performUnitActionAt( Position p ) {
+        if(worldLayout.getUnitAt(p).getTypeString().equals(GameConstants.SETTLER)) {
+            settlerAction.buildCity(p, worldLayout);
+        } else if (worldLayout.getUnitAt(p).getTypeString().equals(GameConstants.ARCHER)) {
+            archerAction.fortify(p, worldLayout);
+        }
     
     }
+
     public Player switchPlayerTurn(Player p ){
       if(p == Player.BLUE){
           return Player.RED;
@@ -226,6 +224,7 @@ public class GameImpl implements Game {
           return Player.BLUE;
       }
     }
+
     public void resetAllUnitMoveCount(){
       for (int i=0;i<GameConstants.WORLDSIZE;i++) {
           for(int j=0;j<GameConstants.WORLDSIZE;j++){
@@ -235,6 +234,7 @@ public class GameImpl implements Game {
           }
       }
     }
+
     public void incrementAllCityProduction(){
       for (int i=0;i<GameConstants.WORLDSIZE;i++){
           for(int j=0;j<GameConstants.WORLDSIZE;j++){
@@ -244,6 +244,7 @@ public class GameImpl implements Game {
           }
       }
     }
+
     public boolean isTreasurySufficientForUnit(int i, int j){
         City currentCity = worldLayout.getCityAt(new Position(i, j));
         if (currentCity != null) {
@@ -267,12 +268,19 @@ public class GameImpl implements Game {
                         return true;
                     }
                     break;
+                case GameConstants.UFO:
+                    if (currentCity.getTreasury() >= 60) {
+                        currentCity.setTreasury(-60);
+                        return true;
+                    }
+                    break;
                 default:
                     return false;
             }
         }
         return false;
     }
+
     public Position findEmptyTileForCityUnitProduction(int i, int j){
         if(worldLayout.getUnitAt(new Position(i,j)) == null){
             return new Position(i,j);

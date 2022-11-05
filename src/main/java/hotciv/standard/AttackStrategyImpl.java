@@ -16,14 +16,12 @@ public class AttackStrategyImpl implements AttackStrategy {
         defenseRoll = defenseRoll2;
     }
 
-
     public boolean attackUnit(Position from, Position to, WorldLayout worldLayout) {
         if(civVariation.equals(GameConstants.EPSILONCIV)) {
             int defender_strength = getDefenseStrength(to,worldLayout);
             int attacker_strength = getAttackStrength(from,worldLayout);
             int attackPower = attackRoll.getRoll();
             int defensePower = defenseRoll.getRoll();
-
 
             if(attacker_strength*attackPower > defender_strength*defensePower) {
                 processSuccessfulAttack(from, to, worldLayout);
@@ -40,7 +38,6 @@ public class AttackStrategyImpl implements AttackStrategy {
     }
 
     private void processSuccessfulAttack(Position from, Position to, WorldLayout worldLayout){
-
         worldLayout.removeUnitAt(to);
         worldLayout.moveUnitTo(to,from);
         worldLayout.removeUnitAt(from);
@@ -53,7 +50,6 @@ public class AttackStrategyImpl implements AttackStrategy {
         //create iteration bounds "around" the city
         int[] rowChange = new int[]{-1, -1, 0, +1, +1, +1, 0, -1};
         int[] columnChange = new int[]{0, +1, +1, +1, 0, -1, -1, -1};
-
         //Iterate around position
         int supporting = 0;
         for (int i = 0; i < rowChange.length; i++) {
@@ -69,9 +65,9 @@ public class AttackStrategyImpl implements AttackStrategy {
                 }
             }
         }
-
         return supporting;
     }
+
     public int getAttackStrength(Position p, WorldLayout worldLayout){
         int sum = (worldLayout.getUnitAt(p).getAttackingStrength() + getFriendlySupport(p, worldLayout)) * getTerrainFactor(p, worldLayout);
         return sum;
@@ -88,13 +84,9 @@ public class AttackStrategyImpl implements AttackStrategy {
 
         switch (worldLayout.getTileAt(p).getTypeString()){
             case GameConstants.HILLS:
-                return 2;
             case GameConstants.FOREST:
                 return 2;
         }
-
-
-
         return 1;
     }
 
