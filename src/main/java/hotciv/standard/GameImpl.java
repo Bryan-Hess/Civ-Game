@@ -127,6 +127,9 @@ public class GameImpl implements Game {
         boolean currentTileMountains = worldLayout.getTileAt(to).getTypeString().equals(GameConstants.MOUNTAINS);
         if( currentTileOceans || currentTileMountains ){
           if( getUnitAt(from).getPassThroughTerrain() ){
+              worldLayout.moveUnitTo(to,from);
+              worldLayout.removeUnitAt(from);
+              worldLayout.getUnitAt(to).countMove();
               return true;
           }
           return false;
