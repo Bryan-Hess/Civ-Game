@@ -72,4 +72,9 @@ public interface City {
    * @int amount: amount of production to be added or removed from the treasury
    */
   public void setTreasury(int amount);
+
+  /** set population size in this city (used for UFO abduction)
+   * @int amount: amount of production to be added or removed from the treasury
+   */
+  public void setSize(int s);
 }

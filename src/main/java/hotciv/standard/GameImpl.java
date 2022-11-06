@@ -153,8 +153,9 @@ public class GameImpl implements Game {
             return retVal;
         }
 
-        //If unit moving onto an enemy city
-        if (worldLayout.getCityAt(to)!=null&&!currentPlayer.equals(worldLayout.getCityAt(to).getOwner())) {
+        //If unit moving onto an enemy city with no enemy units
+        if (worldLayout.getCityAt(to)!=null&&!currentPlayer.equals(worldLayout.getCityAt(to).getOwner())&&!worldLayout.getUnitAt(from).getTypeString().equals(GameConstants.UFO)){
+            //System.out.println("Here");
             //Removes the city and places a new one, if requirements change down the line will need to add setter/getter for city ownership to cityImpl
             worldLayout.removeCityAt(to);
             worldLayout.addCityAt(to, currentPlayer);
@@ -209,6 +210,9 @@ public class GameImpl implements Game {
         //Sets city's production if a valid unit
         if(unitType.equals(GameConstants.ARCHER)|unitType.equals(GameConstants.LEGION)|unitType.equals(GameConstants.SETTLER)) {
         worldLayout.getCityAt(p).setProduction(unitType);
+        } else if (unitType.equals(GameConstants.UFO)) {
+            //Technically should have its own Impl file, will do this in later iteration
+            worldLayout.getCityAt(p).setProduction(unitType);
         }
     }
     public void performUnitActionAt( Position p ) {
@@ -218,7 +222,7 @@ public class GameImpl implements Game {
         }else if (currUnitTypeString.equals(GameConstants.ARCHER)) {
             archerAction.fortify(p, worldLayout);
         }else if (currUnitTypeString.equals(GameConstants.UFO)){
-            ufoAction.abduct(p, worldLayout);
+            ufoAction.abduct(p, worldLayout, currentPlayer);
         }
     
     }

@@ -159,5 +159,7 @@ public class WorldLayoutImpl implements WorldLayout {
     public void incrementRound(){
         round++;
     }
+
+    public void setTile(Position p, String t){tileMap.put( p, new TileImpl(t));}
 }
 

@@ -44,4 +44,6 @@ public class CityImpl implements City {
     public void setTreasury(int amount) {
         treasury+=amount;
     }
+    @Override
+    public void setSize(int s) { size=s; }
 }

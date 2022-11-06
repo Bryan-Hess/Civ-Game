@@ -19,4 +19,5 @@ public interface WorldLayout {
     public void resetWins();
     public int getRound();
     public void incrementRound();
+    public void setTile(Position p, String t);
 }
