@@ -75,12 +75,10 @@ public interface Unit {
    * no return
    */
   public void countMove();
-
   public void setDefensiveStrength(int def);
-
   public void setAttackingStrength(int att);
-
-  public boolean getkeepMoveToZero();
-
-  public void setkeepMoveToZero(boolean flag);
+  public boolean getKeepMoveToZero();
+  public void setKeepMoveToZero(boolean flag);
+  public boolean getPassThroughTerrain();
+  public void setPassThroughTerrain(boolean flag);
 }

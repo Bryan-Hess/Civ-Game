@@ -126,7 +126,9 @@ public interface Game {
    * city should produce next.
    */
   public void changeProductionInCityAt( Position p, String unitType );
-  
+
+  public void addUnitGameLevel(Position p, Player name, String unitType);
+
   /** perform the action associated with the unit at position p.
    * Example: a settler unit may create a new city at its location.
    * Precondition: there is a unit at location 'p'.

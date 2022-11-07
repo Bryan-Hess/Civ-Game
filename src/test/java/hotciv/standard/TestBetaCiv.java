@@ -16,7 +16,7 @@ public class TestBetaCiv {
     public void setUp() {
         stubAttackDiceRoll = new StubAttackDiceRoll();
         stubDefenseDiceRoll = new StubDefenseDiceRoll();
-        game = new GameImpl(GameConstants.BETACIV,stubAttackDiceRoll,stubDefenseDiceRoll);
+        game = new GameImpl(new BetaCivFactory());
     }
 
     @Test

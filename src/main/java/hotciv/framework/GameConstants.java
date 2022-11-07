@@ -35,6 +35,7 @@ public class GameConstants {
   // Valid unit types
   public static final String ARCHER    = "archer";
   public static final String LEGION    = "legion";
+  public static final String UFO       = "ufo";
   public static final String SETTLER   = "settler";
   // Valid terrain types
   public static final String PLAINS    = "plains";
@@ -52,4 +53,5 @@ public class GameConstants {
   public static final String DELTACIV = "deltaCiv";
   public static final String EPSILONCIV = "epsilonCiv";
   public static final String ZETACIV = "zetaCiv";
+  public static final String THETACIV = "thetaCiv";
 }

@@ -23,7 +23,7 @@ public class TestEpsilonCiv {
         stubAttackDiceRoll = new StubAttackDiceRoll();
         stubDefenseDiceRoll = new StubDefenseDiceRoll();
         
-        game = new GameImpl(GameConstants.EPSILONCIV, stubAttackDiceRoll, stubDefenseDiceRoll);
+        game = new GameImpl(new EpsilonCivFactory(stubAttackDiceRoll,stubDefenseDiceRoll));
 
     }
 
@@ -142,8 +142,6 @@ public class TestEpsilonCiv {
         assertThat(game.getUnitAt(new Position(3,2)).getTypeString(), is(GameConstants.LEGION));
         assertThat(game.getUnitAt(new Position(4,3)),is(nullValue()));
     }
-
-
 
 }
 

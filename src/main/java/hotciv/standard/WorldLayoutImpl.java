@@ -8,11 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WorldLayoutImpl implements WorldLayout {
-
     String civVariation;
-
     int round=0;
-
 
     //Hashmaps for tiles, units, cities, and arraylist of cities
     //World Layout is where our world, and all objects in the world, are stored
@@ -21,11 +18,8 @@ public class WorldLayoutImpl implements WorldLayout {
     public Map<Position, Tile> tileMap = new HashMap<>();
     public Map<Position, Unit> unitMap = new HashMap<>();
     public Map<Position, City> cityMap = new HashMap<>();
-
     public Map<Player, Integer> winsMap = new HashMap<>();
-
    // public ArrayList<City> cityList = new ArrayList<>();
-
 
     public WorldLayoutImpl(String civVariationIN){
         civVariation = civVariationIN;
@@ -39,6 +33,7 @@ public class WorldLayoutImpl implements WorldLayout {
         winsMap.put(Player.GREEN,0);
         winsMap.put(Player.YELLOW,0);
     }
+
     //Initializes the world layout
     public void implementWorldLayout() {
         if(civVariation.equals(GameConstants.DELTACIV)){ //DeltaCiv's Map Layout
@@ -61,7 +56,7 @@ public class WorldLayoutImpl implements WorldLayout {
                             "..ooohhoo.......",
                             ".....ooooooooo..",
                     };
-            //DeltaCiv's City and Unite layout
+            //DeltaCiv's City and Unite  layout
             cityMap.put(new Position(8,12), new CityImpl(Player.RED));
             cityMap.put(new Position(4, 5), new CityImpl(Player.BLUE));
 
@@ -109,7 +104,6 @@ public class WorldLayoutImpl implements WorldLayout {
                 // Basically we use a 'data driven' approach - code the
                 // layout in a simple semi-visual representation, and
                 // convert it to the actual Game representation.
-
                 // Conversion...
 
         String line;
@@ -131,82 +125,41 @@ public class WorldLayoutImpl implements WorldLayout {
     }
 
     //Mostly setters and getters for units/cities/tiles given a position
-    public City getCityAt( Position p){
-
-        return cityMap.get(p);
-    };
-
-    public Unit getUnitAt( Position p ){
-
-        return  unitMap.get(p);
-    };
-
-    public Tile getTileAt( Position p ){
-
-        return tileMap.get(p);
-    };
-
-    public void removeCityAt( Position p){
-
-        cityMap.remove(p);
-    };
-
-    public void removeUnitAt( Position p ){
-
-        unitMap.remove(p);
-    };
-
-    public void addCityAt( Position p, Player name){
-
-        cityMap.put(p,new CityImpl(name));
-    };
-
-
-
-    public void addUnitAt( Position p, Player name, String unitType){
-
-        unitMap.put(p,new UnitImpl(name,unitType));
-    };
-
-    public void addUnit( Position p, Unit unit){
-
-        unitMap.put(p,unit);
-    }
-
+    public City getCityAt( Position p){ return cityMap.get(p); }
+    public Unit getUnitAt( Position p ){ return  unitMap.get(p); }
+    public Tile getTileAt( Position p ){ return tileMap.get(p); }
+    public void removeCityAt( Position p){ cityMap.remove(p); }
+    public void removeUnitAt( Position p ){ unitMap.remove(p); }
+    public void addCityAt( Position p, Player name){ cityMap.put(p,new CityImpl(name)); }
+    public void addUnitAt( Position p, Player name, String unitType){ unitMap.put(p,new UnitImpl(name,unitType)); }
+    public void addUnit( Position p, Unit unit){ unitMap.put(p,unit); }
     public void moveUnitTo(Position to, Position from){
         if(unitMap.get(from).getMoveCount()>0) //Makes sure unit has remaining moves left in turn
             unitMap.put(to,unitMap.get(from));
     }
-
     // Returns all the cities in play in a Collection type object
     public Collection<City> getCityList() {
 
         return cityMap.values();
     }
-
     public void addWin(Player player){
         int z = getWins(player);
         winsMap.put(player, z+1);
     }
-
-    public int getWins(Player player){
-
-        return winsMap.get(player);
-    }
-
+    public int getWins(Player player){ return winsMap.get(player); }
     public void resetWins(){
         winsMap.put(Player.RED, 0);
         winsMap.put(Player.BLUE, 0);
         winsMap.put(Player.GREEN, 0);
         winsMap.put(Player.YELLOW, 0);
     }
-
     public int getRound(){
         return round;
     }
-
-    public void incrimentRound(){
+    public void incrementRound(){
         round++;
     }
+
+    public void setTile(Position p, String t){tileMap.put( p, new TileImpl(t));}
 }
 

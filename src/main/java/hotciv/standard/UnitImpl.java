@@ -11,29 +11,38 @@ public class UnitImpl implements Unit {
     private int moveCount;
     private int attackStrength;
     private int defenseStrength;
-    private boolean keepMoveToZero; //Used for fority to keep a unit's move count 0
+    private boolean keepMoveToZero; //Used for fortify to keep a unit's move count 0
+    private boolean passThroughTerrain; //Used for UFO's to be able to move over any terrain
 
     public UnitImpl(Player name, String unitType){
         owner = name;
         type = unitType;
         moveCount = 1;
         keepMoveToZero = false;
+        passThroughTerrain = false;
 
         //Switch case to set unit's initial attack/defense
         switch(unitType){
-            case "archer":
+            case GameConstants.ARCHER:
                 defenseStrength = 3;
                 attackStrength = 2;
                 break;
 
-            case "legion":
+            case GameConstants.LEGION:
                 defenseStrength = 2;
                 attackStrength = 4;
                 break;
 
-            case "settler":
+            case GameConstants.SETTLER:
                 defenseStrength = 3;
                 attackStrength = 0;
+                break;
+
+            case GameConstants.UFO:
+                defenseStrength = 8;
+                attackStrength = 1;
+                passThroughTerrain = true;
+                moveCount = 2;
                 break;
         }
     }
@@ -43,51 +52,43 @@ public class UnitImpl implements Unit {
     public String getTypeString() {
         return type;
     }
-
     @Override
     public Player getOwner() {
         return owner;
     }
-
     @Override
     public int getMoveCount() {
         return moveCount;
     }
-
     @Override
     public int getDefensiveStrength() {
         return defenseStrength;
     }
-
     @Override
     public int getAttackingStrength() {
         return attackStrength;
     }
-
     public void resetMoveCount() {
-        if(keepMoveToZero==false) //If statement to make sure fortified units keep a move count of 0
+        if(!keepMoveToZero) //If statement to make sure fortified units keep a move count of 0
             moveCount = 1;
     }
-
     public void countMove(){
         moveCount = moveCount - 1;
     }
-
     public void setDefensiveStrength(int def) {
         defenseStrength = def;
     }
-
     public void setAttackingStrength(int att) {
         attackStrength = att;
     }
-
-    public void setkeepMoveToZero(boolean flag) {
+    public void setKeepMoveToZero(boolean flag) {
         keepMoveToZero = flag;
     }
-
-    public boolean getkeepMoveToZero() {
+    public boolean getKeepMoveToZero() {
         return keepMoveToZero;
     }
+    public boolean getPassThroughTerrain(){ return passThroughTerrain; }
+    public void setPassThroughTerrain(boolean flag){ passThroughTerrain = flag; }
 
 }
 
