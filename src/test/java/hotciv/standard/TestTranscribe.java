@@ -22,6 +22,7 @@ public class TestTranscribe {
         for(int i = 0; i < 10; i++)
             game.endOfTurn();
         assertThat(game.getAge(), is(-3000));
+        assertThat(game.getWinner(), is(Player.RED));
     }
 
     @Test

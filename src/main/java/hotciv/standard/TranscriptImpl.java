@@ -12,8 +12,8 @@ public class TranscriptImpl extends Transcript{
     public Player getWinner(){
         if(super.getTranscribing()){
             if(super.getWinner() != null){
-                System.out.println(super.getWinner() + "has won!");
-                super.getTranscript().add(super.getWinner() + "has won!\n");
+                System.out.println(super.getWinner() + " has won!");
+                super.getTranscript().add(super.getWinner() + " has won!\n");
             }
         }
         return super.getWinner();
