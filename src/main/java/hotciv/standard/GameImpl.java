@@ -38,7 +38,6 @@ public class GameImpl implements Game {
     private DecideWinner decideWinner;
     private ArcherAction archerAction;
     private SettlerAction settlerAction;
-
     private UFOAction ufoAction;
     private AttackStrategy attackStrategy;
     private WorldLayout worldLayout;
@@ -109,7 +108,6 @@ public class GameImpl implements Game {
   }
     public Player getWinner() {
         return decideWinner.getWinner(currentAge,worldLayout);
-
     }
     public int getAge() {
     return currentAge;
