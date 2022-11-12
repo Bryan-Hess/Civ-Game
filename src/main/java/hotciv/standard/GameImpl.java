@@ -2,6 +2,8 @@ package hotciv.standard;
 
 import hotciv.framework.*;
 
+import java.util.ArrayList;
+
 /** Skeleton implementation of HotCiv.
  
    This source code is from the book 
@@ -42,6 +44,7 @@ public class GameImpl implements Game {
     private AttackStrategy attackStrategy;
     private WorldLayout worldLayout;
     private VariationFactory factory;
+    private ArrayList<String> transcript = new ArrayList<>();
 
     //Declares the implementations based on the Civ variant
     public void setWorldAgingVariation(String civVar){
@@ -309,6 +312,12 @@ public class GameImpl implements Game {
 
     public void addUnitGameLevel(Position p, Player name, String unitType){
         worldLayout.addUnitAt(p,name,unitType);
+    }
+    public void commitToTranscript(String s){
+        transcript.add(s);
+    }
+    public ArrayList<String> getTranscript(){
+        return transcript;
     }
 }
 

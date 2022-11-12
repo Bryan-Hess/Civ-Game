@@ -13,7 +13,7 @@ public class TranscriptImpl extends Transcript{
         if(super.getTranscribing()){
             if(super.getWinner() != null){
                 System.out.println(super.getWinner() + " has won!");
-                super.getTranscript().add(super.getWinner() + " has won!\n");
+                super.getGame().commitToTranscript(super.getWinner() + " has won!\n");
             }
         }
         return super.getWinner();
@@ -23,7 +23,7 @@ public class TranscriptImpl extends Transcript{
     public int getAge(){
         if(super.getTranscribing()){
             System.out.println("Age:" + super.getAge()+".");
-            super.getTranscript().add("Age:" + super.getAge()+".\n");
+            super.getGame().commitToTranscript("Age:" + super.getAge()+".\n");
         }
         return super.getAge();
     }
@@ -33,7 +33,7 @@ public class TranscriptImpl extends Transcript{
         if(super.getTranscribing()){
             System.out.println(super.getPlayerInTurn() + " moves " + super.getUnitAt(from).getTypeString() +
                     " from " + from + " to " + to + ".");
-            super.getTranscript().add(super.getPlayerInTurn() + " moves " + super.getUnitAt(from).getTypeString() +
+            super.getGame().commitToTranscript(super.getPlayerInTurn() + " moves " + super.getUnitAt(from).getTypeString() +
                     " from " + from + " to " + to + ".\n");
         }
         return super.moveUnit(from,to);
@@ -43,7 +43,7 @@ public class TranscriptImpl extends Transcript{
     public void endOfTurn(){
         if(super.getTranscribing()){
             System.out.println(super.getPlayerInTurn() + " ends turn.");
-            super.getTranscript().add(super.getPlayerInTurn() + " ends turn.\n");
+            super.getGame().commitToTranscript(super.getPlayerInTurn() + " ends turn.\n");
         }
         super.endOfTurn();
     }
@@ -53,7 +53,7 @@ public class TranscriptImpl extends Transcript{
         if(super.getTranscribing()){
             System.out.println(super.getPlayerInTurn() + " changes work focus in city at " + p + " to " +
                     balance + ".");
-            super.getTranscript().add(super.getPlayerInTurn() + " changes work focus in city at " + p + " to " +
+            super.getGame().commitToTranscript(super.getPlayerInTurn() + " changes work focus in city at " + p + " to " +
                     balance + ".\n");
         }
         super.changeWorkForceFocusInCityAt(p,balance);
@@ -64,7 +64,7 @@ public class TranscriptImpl extends Transcript{
         if(super.getTranscribing()){
             System.out.println(super.getPlayerInTurn() + " changes production in city at " + p + " to " +
                     unitType + ".");
-            super.getTranscript().add(super.getPlayerInTurn() + " changes production in city at " + p + " to " +
+            super.getGame().commitToTranscript(super.getPlayerInTurn() + " changes production in city at " + p + " to " +
                     unitType + ".\n");
         }
         super.changeProductionInCityAt(p,unitType);
@@ -74,7 +74,7 @@ public class TranscriptImpl extends Transcript{
     public void addUnitGameLevel(Position p, Player name, String unitType){
         if(super.getTranscribing()){
             System.out.println(name + " has created " + unitType + " at " + p + ".");
-            super.getTranscript().add(name + " has created " + unitType + " at " + p + ".\n");
+            super.getGame().commitToTranscript(name + " has created " + unitType + " at " + p + ".\n");
         }
         super.addUnitGameLevel(p,name,unitType);
     }
@@ -86,19 +86,19 @@ public class TranscriptImpl extends Transcript{
                 case GameConstants.ARCHER:
                     System.out.println(super.getPlayerInTurn() + "'s " + GameConstants.ARCHER +
                             " is fortifying at " + p + ".\n");
-                    super.getTranscript().add(super.getPlayerInTurn() + "'s " + GameConstants.ARCHER +
+                    super.getGame().commitToTranscript(super.getPlayerInTurn() + "'s " + GameConstants.ARCHER +
                             " is fortifying at " + p + ".\n");
                     break;
                 case GameConstants.SETTLER:
                     System.out.println(super.getPlayerInTurn() + "'s " + GameConstants.SETTLER +
                             " is building a city at " + p + ".\n");
-                    super.getTranscript().add(super.getPlayerInTurn() + "'s " + GameConstants.SETTLER +
+                    super.getGame().commitToTranscript(super.getPlayerInTurn() + "'s " + GameConstants.SETTLER +
                             " is building a city at " + p + ".\n");
                     break;
                 case GameConstants.UFO:
                     System.out.println(super.getPlayerInTurn() + "'s " + GameConstants.UFO +
                             " is abducting at " + p + ".\n");
-                    super.getTranscript().add(super.getPlayerInTurn() + "'s " + GameConstants.UFO +
+                    super.getGame().commitToTranscript(super.getPlayerInTurn() + "'s " + GameConstants.UFO +
                             " is abducting at " + p + ".\n");
                     break;
                 default:

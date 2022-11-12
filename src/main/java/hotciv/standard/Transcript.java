@@ -7,7 +7,6 @@ import java.util.ArrayList;
 public class Transcript implements Game {
     private Game game;
     public boolean transcribing;
-    private ArrayList<String> transcript = new ArrayList<>();
 
     public Transcript(Game g, boolean t) {
         game = g;
@@ -36,7 +35,9 @@ public class Transcript implements Game {
     public void performUnitActionAt( Position p ){ game.performUnitActionAt(p); }
     public Object getAttackStrategy(){ return game.getAttackStrategy(); }
     public WorldLayout getWorldLayout(){ return game.getWorldLayout(); }
-    public ArrayList<String> getTranscript(){ return transcript; }
     public void setTranscribing(boolean t){ transcribing = t; }
     public boolean getTranscribing(){ return transcribing; }
+    public Game getGame(){ return game; }
+    public void commitToTranscript( String s ){ game.commitToTranscript(s); }
+    public ArrayList<String> getTranscript(){ return game.getTranscript(); }
 }

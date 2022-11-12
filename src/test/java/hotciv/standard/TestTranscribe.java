@@ -19,10 +19,13 @@ public class TestTranscribe {
     @Test
     public void validateTranscriptionOfWinner(){
         assertThat(game, is(notNullValue()));
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 10; i++) {
             game.endOfTurn();
+        }
         assertThat(game.getAge(), is(-3000));
+        assertThat(game.getTranscript().get(10), is("Age:-3000.\n"));
         assertThat(game.getWinner(), is(Player.RED));
+        assertThat(game.getTranscript().get(11), is("RED has won!\n"));
     }
 
     @Test
