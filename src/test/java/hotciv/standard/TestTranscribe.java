@@ -32,12 +32,20 @@ public class TestTranscribe {
 
     @Test
     public void validateTranscriptionOfAge(){
-
+        assertThat(game, is(notNullValue()));
+        game.endOfTurn();
+        assertThat(game.getAge(), is(-3900));
+        assertThat(game.getTranscript().get(1), is("Age:-3900.\n"));
+        game.endOfTurn();
+        assertThat(game.getAge(), is(-3800));
+        assertThat(game.getTranscript().get(3), is("Age:-3800.\n"));
+        game.endOfTurn();
+        assertThat(game.getAge(), is(-3700));
+        assertThat(game.getTranscript().get(5), is("Age:-3700.\n"));
     }
 
     @Test
     public void validateTranscriptionOfMoveUnit(){
-
         assertThat(game, is(notNullValue()));
         assertThat(game.getPlayerInTurn(), is(Player.RED));
         assertThat(game.moveUnit(new Position(2,0),new Position(2,1)),is(true));
@@ -45,7 +53,6 @@ public class TestTranscribe {
         assertThat(game.getUnitAt(new Position(2,1)).getOwner(), is(Player.RED));
         assertThat(game.getUnitAt(new Position(2,0)), is(nullValue()));
         assertThat(game.getTranscript().get(0), is("RED moves archer from [2,0] to [2,1].\n"));
-
     }
 
     @Test
@@ -54,27 +61,25 @@ public class TestTranscribe {
         assertThat(game.getTranscript().get(0),is("RED ends turn.\n"));
         game.endOfTurn();
         assertThat(game.getTranscript().get(1),is("BLUE ends turn.\n"));
-
     }
 
     @Test
     public void validateTranscriptionOfChangeWorkForceFocusInCity(){
-
+        assertThat(game, is(notNullValue()));
+        game.changeWorkForceFocusInCityAt(new Position(1,1), "Some Balance");
+        //Assertions will be added once changeWorkForceInCityAt has implementation
     }
 
     @Test
     public void validateTranscriptionOfChangeProductionInCity(){
-
         assertThat(game, is(notNullValue()));
         game.changeProductionInCityAt(new Position(1,1),GameConstants.ARCHER);
         assertThat(game.getCityAt(new Position(1,1)).getProduction(), is(GameConstants.ARCHER));
         assertThat(game.getTranscript().get(0),is("RED changes production in city at [1,1] to archer.\n"));
-
     }
 
     @Test
     public void validateTranscriptionOfAddUnitGameLevel(){
-
         assertThat(game, is(notNullValue()));
         game.addUnitGameLevel((new Position(8,8)),Player.RED,GameConstants.ARCHER);
         game.endOfTurn();
@@ -84,7 +89,6 @@ public class TestTranscribe {
         game.endOfTurn();
         assertThat(game.getTranscript().get(2),is("BLUE has created legion at [9,9].\n"));
         assertThat(game.getTranscript().get(3),is("BLUE ends turn.\n"));
-
     }
 
     @Test
