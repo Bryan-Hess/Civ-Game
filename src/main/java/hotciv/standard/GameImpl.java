@@ -2,6 +2,8 @@ package hotciv.standard;
 
 import hotciv.framework.*;
 
+import java.util.ArrayList;
+
 /** Skeleton implementation of HotCiv.
  
    This source code is from the book 
@@ -38,11 +40,11 @@ public class GameImpl implements Game {
     private DecideWinner decideWinner;
     private ArcherAction archerAction;
     private SettlerAction settlerAction;
-
     private UFOAction ufoAction;
     private AttackStrategy attackStrategy;
     private WorldLayout worldLayout;
     private VariationFactory factory;
+    private ArrayList<String> transcript = new ArrayList<>();
 
     //Declares the implementations based on the Civ variant
     public void setWorldAgingVariation(String civVar){
@@ -84,11 +86,7 @@ public class GameImpl implements Game {
         this.attackStrategy = factory.createAttackStrategy();
         this.WorldAging = factory.createWorldAgingStrategy();
         this.decideWinner = factory.createDecideWinnerStrategy();
-        //setWorldAgingVariation(civVar);
-        //setDecideWinnerVariation(civVar);
-        //setArcherActionVariation(civVar);
-        //setSettlerActionVariation(civVar);
-        //setAttackStrategyVariation(civVar, attackRoll,defenseRoll);
+
         //Game starts on Red player in year 4000BC
         currentPlayer = Player.RED;
         currentAge = -4000;
@@ -109,7 +107,6 @@ public class GameImpl implements Game {
   }
     public Player getWinner() {
         return decideWinner.getWinner(currentAge,worldLayout);
-
     }
     public int getAge() {
     return currentAge;
@@ -158,7 +155,6 @@ public class GameImpl implements Game {
 
         //If unit moving onto an enemy city with no enemy units
         if (worldLayout.getCityAt(to)!=null&&!currentPlayer.equals(worldLayout.getCityAt(to).getOwner())&&!worldLayout.getUnitAt(from).getTypeString().equals(GameConstants.UFO)){
-            //System.out.println("Here");
             //Removes the city and places a new one, if requirements change down the line will need to add setter/getter for city ownership to cityImpl
             worldLayout.removeCityAt(to);
             worldLayout.addCityAt(to, currentPlayer);
@@ -171,14 +167,7 @@ public class GameImpl implements Game {
         return true;
     }
     public boolean pvpCombat( Position from, Position to ) {
-        /*
-        In future iterations, we will compare attacking/defending strength.
-        For this iteration, we do not need to compare stats, because the attacker always wins
-        worldLayout.removeUnitAt(to);
-        worldLayout.moveUnitTo(to,from);
-        worldLayout.removeUnitAt(from);
-        worldLayout.getUnitAt(to).countMove();
-        */
+
         boolean retVale;
         retVale = attackStrategy.attackUnit(from, to, worldLayout);
         return retVale;
@@ -243,6 +232,7 @@ public class GameImpl implements Game {
           for(int j=0;j<GameConstants.WORLDSIZE;j++){
               if(worldLayout.getUnitAt(new Position(i,j))!=null){
                   worldLayout.getUnitAt(new Position(i,j)).resetMoveCount();
+                  worldLayout.getUnitAt(new Position(i,j)).resetActionCount();
               }
           }
       }
@@ -311,6 +301,12 @@ public class GameImpl implements Game {
 
     public void addUnitGameLevel(Position p, Player name, String unitType){
         worldLayout.addUnitAt(p,name,unitType);
+    }
+    public void commitToTranscript(String s){
+        transcript.add(s);
+    }
+    public ArrayList<String> getTranscript(){
+        return transcript;
     }
 }
 

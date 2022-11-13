@@ -81,4 +81,10 @@ public interface Unit {
   public void setKeepMoveToZero(boolean flag);
   public boolean getPassThroughTerrain();
   public void setPassThroughTerrain(boolean flag);
+
+  public int getActionCount();
+
+  public void countAction();
+
+  public void resetActionCount();
 }

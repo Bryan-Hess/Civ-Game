@@ -14,12 +14,15 @@ public class UnitImpl implements Unit {
     private boolean keepMoveToZero; //Used for fortify to keep a unit's move count 0
     private boolean passThroughTerrain; //Used for UFO's to be able to move over any terrain
 
+    private int actionCount;
+
     public UnitImpl(Player name, String unitType){
         owner = name;
         type = unitType;
         moveCount = 1;
         keepMoveToZero = false;
         passThroughTerrain = false;
+        actionCount = 1;
 
         //Switch case to set unit's initial attack/defense
         switch(unitType){
@@ -70,7 +73,10 @@ public class UnitImpl implements Unit {
     }
     public void resetMoveCount() {
         if(!keepMoveToZero) //If statement to make sure fortified units keep a move count of 0
-            moveCount = 1;
+            if(type == GameConstants.UFO)
+                moveCount = 2;
+            else
+                moveCount = 1;
     }
     public void countMove(){
         moveCount = moveCount - 1;
@@ -89,6 +95,13 @@ public class UnitImpl implements Unit {
     }
     public boolean getPassThroughTerrain(){ return passThroughTerrain; }
     public void setPassThroughTerrain(boolean flag){ passThroughTerrain = flag; }
+
+    public void countAction(){ actionCount=actionCount-1;}
+    public void resetActionCount(){
+        if(!keepMoveToZero)
+            actionCount = 1;}
+
+    public int getActionCount(){ return actionCount;}
 
 }
 
