@@ -155,7 +155,6 @@ public class GameImpl implements Game {
 
         //If unit moving onto an enemy city with no enemy units
         if (worldLayout.getCityAt(to)!=null&&!currentPlayer.equals(worldLayout.getCityAt(to).getOwner())&&!worldLayout.getUnitAt(from).getTypeString().equals(GameConstants.UFO)){
-            //System.out.println("Here");
             //Removes the city and places a new one, if requirements change down the line will need to add setter/getter for city ownership to cityImpl
             worldLayout.removeCityAt(to);
             worldLayout.addCityAt(to, currentPlayer);
@@ -168,14 +167,7 @@ public class GameImpl implements Game {
         return true;
     }
     public boolean pvpCombat( Position from, Position to ) {
-        /*
-        In future iterations, we will compare attacking/defending strength.
-        For this iteration, we do not need to compare stats, because the attacker always wins
-        worldLayout.removeUnitAt(to);
-        worldLayout.moveUnitTo(to,from);
-        worldLayout.removeUnitAt(from);
-        worldLayout.getUnitAt(to).countMove();
-        */
+
         boolean retVale;
         retVale = attackStrategy.attackUnit(from, to, worldLayout);
         return retVale;
@@ -240,6 +232,7 @@ public class GameImpl implements Game {
           for(int j=0;j<GameConstants.WORLDSIZE;j++){
               if(worldLayout.getUnitAt(new Position(i,j))!=null){
                   worldLayout.getUnitAt(new Position(i,j)).resetMoveCount();
+                  worldLayout.getUnitAt(new Position(i,j)).resetActionCount();
               }
           }
       }
