@@ -86,11 +86,7 @@ public class GameImpl implements Game {
         this.attackStrategy = factory.createAttackStrategy();
         this.WorldAging = factory.createWorldAgingStrategy();
         this.decideWinner = factory.createDecideWinnerStrategy();
-        //setWorldAgingVariation(civVar);
-        //setDecideWinnerVariation(civVar);
-        //setArcherActionVariation(civVar);
-        //setSettlerActionVariation(civVar);
-        //setAttackStrategyVariation(civVar, attackRoll,defenseRoll);
+
         //Game starts on Red player in year 4000BC
         currentPlayer = Player.RED;
         currentAge = -4000;
