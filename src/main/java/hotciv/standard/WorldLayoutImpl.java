@@ -128,6 +128,47 @@ public class WorldLayoutImpl implements WorldLayout {
     public City getCityAt( Position p){ return cityMap.get(p); }
     public Unit getUnitAt( Position p ){ return  unitMap.get(p); }
     public Tile getTileAt( Position p ){ return tileMap.get(p); }
+
+    public int[] getSurroundingTileCount( Position p){
+
+        // This method will return an array of size 5
+        // Each entry for the array will represent the quantity of each type of tile of the surrounding 8 tiles
+        // The 5 entries will represent the count in the following order:
+        // [0] - Plains, [1] - Oceans, [2] - Forests, [3] - Mountains, [4] - Hills
+
+        int[] rows = {0,1,1,1,0,-1,-1,-1};
+        int[] cols = {-1,-1,0,1,1,1,0,-1};
+
+        int i = p.getRow();
+        int j = p.getColumn();
+
+        int[] tileCountArray = {0,0,0,0,0};
+
+
+        for(int index = 0; index < rows.length; index++){
+
+            String tileType = getTileAt(new Position(i + rows[index],j + cols[index])).getTypeString();
+
+            switch (tileType){
+                case GameConstants.PLAINS:
+                    tileCountArray[0] += 1;
+                    break;
+                case GameConstants.OCEANS:
+                    tileCountArray[1] += 1;
+                    break;
+                case GameConstants.FOREST:
+                    tileCountArray[2] += 1;
+                    break;
+                case GameConstants.MOUNTAINS:
+                    tileCountArray[3] += 1;
+                    break;
+                case GameConstants.HILLS:
+                    tileCountArray[4] += 1;
+                    break;
+            }
+        }
+        return tileCountArray;
+    }
     public void removeCityAt( Position p){ cityMap.remove(p); }
     public void removeUnitAt( Position p ){ unitMap.remove(p); }
     public void addCityAt( Position p, Player name){ cityMap.put(p,new CityImpl(name)); }

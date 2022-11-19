@@ -10,4 +10,5 @@ public interface VariationFactory {
     public DecideWinner createDecideWinnerStrategy();
     public WorldLayout createWorldLayoutStrategy();
     public UFOAction createUFOActionStrategy();
+    public Production createProductionStrategy();
 }

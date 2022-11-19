@@ -1,20 +1,31 @@
 package hotciv.standard;
 
 import hotciv.framework.City;
+import hotciv.framework.GameConstants;
 import hotciv.framework.Player;
 
 public class CityImpl implements City {
     //Declaration of private variables
     private Player owner;
     private int treasury;
-    private int size;
+
+    private int food;
+    private int populationSize;
     private String production;
+
+
+
+    private String focus;
+
+
 
     public CityImpl(Player name){
         owner = name;
-        size = 1;
+        populationSize = 1;
         treasury = 0;
+        food = 0;
         production = "";
+        focus = GameConstants.productionFocus;
     }
     @Override
     public Player getOwner() {
@@ -22,7 +33,7 @@ public class CityImpl implements City {
     }
     @Override
     public int getSize() {
-        return size;
+        return populationSize;
     }
     @Override
     public int getTreasury() {
@@ -32,9 +43,11 @@ public class CityImpl implements City {
     public String getProduction() {
         return production;
     }
+
+    public void setWorkforceFocus(String balance){ focus = balance;}
     @Override
     public String getWorkforceFocus() {
-        return null;
+        return focus;
     }
     @Override
     public void setProduction(String prod) {
@@ -45,5 +58,15 @@ public class CityImpl implements City {
         treasury+=amount;
     }
     @Override
-    public void setSize(int s) { size=s; }
+    public void setSize(int s) { populationSize=s; }
+
+    public int getFood(){ return food;}
+
+    public void setFood(int f){
+        food += f;
+    }
+
+    public void resetFood(){ food = 0;}
+
+
 }
