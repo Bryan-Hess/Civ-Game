@@ -43,6 +43,8 @@ public class GameImpl implements Game {
     private UFOAction ufoAction;
     private AttackStrategy attackStrategy;
     private WorldLayout worldLayout;
+
+    private Production productionStrategy;
     private VariationFactory factory;
     private ArrayList<String> transcript = new ArrayList<>();
 
@@ -86,6 +88,7 @@ public class GameImpl implements Game {
         this.attackStrategy = factory.createAttackStrategy();
         this.WorldAging = factory.createWorldAgingStrategy();
         this.decideWinner = factory.createDecideWinnerStrategy();
+        this.productionStrategy = factory.createProductionStrategy();
 
         //Game starts on Red player in year 4000BC
         currentPlayer = Player.RED;
@@ -196,7 +199,11 @@ public class GameImpl implements Game {
         }
         worldLayout.incrementRound();
       }
-    public void changeWorkForceFocusInCityAt( Position p, String balance ) {}
+    public void changeWorkForceFocusInCityAt( Position p, String balance ) {
+        if(worldLayout.getCityAt(p).getOwner().equals(currentPlayer)) {
+            worldLayout.getCityAt(p).setWorkforceFocus(balance);
+        }
+    }
 
     public void changeProductionInCityAt( Position p, String unitType ) {
         //Sets city's production if a valid unit
@@ -239,13 +246,10 @@ public class GameImpl implements Game {
     }
 
     public void incrementAllCityProduction(){
-      for (int i=0;i<GameConstants.WORLDSIZE;i++){
-          for(int j=0;j<GameConstants.WORLDSIZE;j++){
-              if(worldLayout.getCityAt(new Position(i,j))!=null){
-                  worldLayout.getCityAt(new Position(i,j)).setTreasury(6);
-              }
-          }
-      }
+        // call production function
+        // break into its own impl file
+      productionStrategy.incrementProduction(worldLayout);
+
     }
 
     public boolean isTreasurySufficientForUnit(int i, int j){

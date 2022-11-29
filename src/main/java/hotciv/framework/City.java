@@ -77,4 +77,12 @@ public interface City {
    * @int amount: amount of production to be added or removed from the treasury
    */
   public void setSize(int s);
+
+  public void setWorkforceFocus(String balance);
+
+  public void setFood(int tempFood);
+
+  int getFood();
+
+  void resetFood();
 }
