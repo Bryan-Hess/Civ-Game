@@ -305,8 +305,14 @@ public class GameImpl implements Game {
     public void commitToTranscript(String s){
         transcript.add(s);
     }
-    public ArrayList<String> getTranscript(){
-        return transcript;
+    public ArrayList<String> getTranscript(){ return transcript; }
+
+    public void setTileFocus(Position position) {
+        //Todo placeholder for impl
+    }
+
+    public void addObserver(GameObserver observer) {
+        //Todo placeholder for impl
     }
 }
 

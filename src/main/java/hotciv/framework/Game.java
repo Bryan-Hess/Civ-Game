@@ -129,8 +129,6 @@ public interface Game {
    */
   public void changeProductionInCityAt( Position p, String unitType );
 
-  public void addUnitGameLevel(Position p, Player name, String unitType);
-
   /** perform the action associated with the unit at position p.
    * Example: a settler unit may create a new city at its location.
    * Precondition: there is a unit at location 'p'.
@@ -138,6 +136,25 @@ public interface Game {
    * Nothing happens in case the unit has no associated action.
    */
   public void performUnitActionAt( Position p );
+
+  /** add an observer on this game instance. The game
+   * instance acts as 'subject' in the pattern.
+   * @param observer the observer to notify in case of
+   * state changes.
+   */
+  public void addObserver(GameObserver observer);
+
+  /** set the focus on a specific tile. This will
+   * result in an event being broadcast to all
+   * observers that focus has been changed to
+   * this tile. Precondition: the position
+   * is within the limits of the game world.
+   * @param position the position of the tile that
+   * has focus.
+   */
+  public void setTileFocus(Position position);
+
+  public void addUnitGameLevel(Position p, Player name, String unitType);
   Object getAttackStrategy();
   WorldLayout getWorldLayout();
   public void commitToTranscript( String s );
