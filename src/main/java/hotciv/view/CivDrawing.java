@@ -48,7 +48,6 @@ public class CivDrawing
   protected Drawing delegate;
   /** store all moveable figures visible in this drawing = units */
   protected Map<Unit,UnitFigure> unitFigureMap;
-
   protected Map<City, CityFigure> cityFigureMap;
 
   /** the Game instance that this CivDrawing is going to render units
@@ -227,18 +226,85 @@ public class CivDrawing
   public void tileFocusChangedAt(Position position) {
     Unit u = game.getUnitAt(position);
     City c = game.getCityAt(position);
-    //TODO: Implement more here later
 
+    boolean unitExists = u != null;
+    boolean cityExists = c != null;
+
+    remove(cityShield);
+    remove(cityProduction);
+    remove(cityWorkforce);
+    remove(movesLeft);
+    remove(unitShield);
+
+    if (unitExists){
+      createUnitShield(u);
+      createUnitMovesLeftText(u);
+    }
+
+    if (cityExists) {
+      createCityOwnerIcon(c);
+      createCityProductionIcon(c);
+      createCityWorkforceIcon(c);
+    }
   }
 
   @Override
   public void requestUpdate() {
-    // A request has been issued to repaint
-    // everything. We simply rebuild the
-    // entire Drawing.
     defineUnitMap();
     defineIcons();
     defineCityMap();
+  }
+
+  private String convertShieldToOwner(Player owner) {
+    String player = owner.toString().toLowerCase();
+    return player + "shield";
+  }
+
+  private void updateAge(int age) {
+    if (age < 0)
+      ageText.setText(Math.abs(age) + "BC");
+    else
+      ageText.setText(Math.abs(age) + "AC");
+  }
+
+  private void createUnitMovesLeftText(Unit unit) {
+    movesLeft = new TextFigure("999",
+            new Point(GfxConstants.UNIT_COUNT_X,
+                    GfxConstants.UNIT_COUNT_Y));
+    movesLeft.setText("" + unit.getMoveCount());
+    delegate.add(movesLeft);
+  }
+
+  private void createCityOwnerIcon(City city) {
+    cityShield = new DefaultFigure(convertShieldToOwner(city.getOwner()),
+            new Point(GfxConstants.CITY_SHIELD_X,
+                    GfxConstants.CITY_SHIELD_Y),
+            GfxConstants.CITY_TYPE_STRING);
+    delegate.add(cityShield);
+  }
+
+  private void createCityProductionIcon(City city) {
+    cityProduction = new DefaultFigure(city.getProduction() ,
+            new Point(GfxConstants.CITY_PRODUCTION_X,
+                    GfxConstants.CITY_PRODUCTION_Y),
+            GfxConstants.PRODUCTION_TYPE_STRING);
+    delegate.add(cityProduction);
+  }
+
+  private void createCityWorkforceIcon(City city) {
+    cityWorkforce = new DefaultFigure(city.getWorkforceFocus() ,
+            new Point(GfxConstants.WORKFORCEFOCUS_X,
+                    GfxConstants.WORKFORCEFOCUS_Y),
+            GfxConstants.WORKFORCE_TYPE_STRING);
+    delegate.add(cityWorkforce);
+  }
+
+  private void createUnitShield(Unit unit) {
+    unitShield = new DefaultFigure(convertShieldToOwner(unit.getOwner()),
+            new Point(GfxConstants.UNIT_SHIELD_X,
+                    GfxConstants.UNIT_SHIELD_Y ),
+            GfxConstants.UNIT_SHIELD_TYPE_STRING);
+    delegate.add(unitShield);
   }
 
   @Override
@@ -326,12 +392,4 @@ public class CivDrawing
     delegate.unlock();
   }
 
-  private void createUnitMovesLeftText(Unit unit) {
-    movesLeft = new TextFigure("999",
-            new Point(GfxConstants.UNIT_COUNT_X,
-                    GfxConstants.UNIT_COUNT_Y));
-    movesLeft.setText("" + unit.getMoveCount());
-    delegate.add(movesLeft);
-
-  }
 }
