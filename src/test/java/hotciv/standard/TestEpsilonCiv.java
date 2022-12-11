@@ -2,9 +2,9 @@ package hotciv.standard;
 
 import hotciv.framework.*;
 
-import hotciv.visual.standard.AttackStrategyImpl;
-import hotciv.visual.standard.EpsilonCivFactory;
-import hotciv.visual.standard.GameImpl;
+import hotciv.standard.AttackStrategyImpl;
+import hotciv.standard.EpsilonCivFactory;
+import hotciv.standard.GameImpl;
 import org.junit.*;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;

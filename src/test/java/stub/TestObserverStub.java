@@ -1,11 +1,11 @@
 package stub;
 
-import hotciv.visual.standard.GameImpl;
+import hotciv.standard.GameImpl;
 import hotciv.stub.ObserverStub;
 import hotciv.framework.*;
 
-import hotciv.visual.standard.AlphaCivFactory;
-import hotciv.visual.standard.GameImpl;
+import hotciv.standard.AlphaCivFactory;
+import hotciv.standard.GameImpl;
 import org.junit.*;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;

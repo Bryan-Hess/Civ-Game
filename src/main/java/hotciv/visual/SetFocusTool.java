@@ -19,17 +19,17 @@ public class SetFocusTool extends NullTool {
         if (game.getUnitAt(GfxConstants.getPositionFromXY(x,y))!=null){
             game.setTileFocus(GfxConstants.getPositionFromXY(x,y));
             editor.showStatus(
-            game.getUnitAt(GfxConstants.getPositionFromXY(x,y)).getOwner() + " " +
-            game.getUnitAt(GfxConstants.getPositionFromXY(x,y)).getTypeString() +
-            ". Defense: " +game.getUnitAt(GfxConstants.getPositionFromXY(x,y)).getDefensiveStrength() +
-            ". Attackk: " +game.getUnitAt(GfxConstants.getPositionFromXY(x,y)).getAttackingStrength());
+                game.getUnitAt(GfxConstants.getPositionFromXY(x,y)).getOwner() + " " +
+                    game.getUnitAt(GfxConstants.getPositionFromXY(x,y)).getTypeString() +
+                    ". Defense: " +game.getUnitAt(GfxConstants.getPositionFromXY(x,y)).getDefensiveStrength() +
+                    ". Attack: " +game.getUnitAt(GfxConstants.getPositionFromXY(x,y)).getAttackingStrength());
         }
         if (game.getCityAt(GfxConstants.getPositionFromXY(x,y))!=null){
             game.setTileFocus(GfxConstants.getPositionFromXY(x,y));
             editor.showStatus("Production " +
-            game.getCityAt(GfxConstants.getPositionFromXY(x,y)).getProduction() +
-            ". Treasury: " + game.getCityAt(GfxConstants.getPositionFromXY(x,y)).getTreasury() +
-            ". Workforce Focus: " +game.getCityAt(GfxConstants.getPositionFromXY(x,y)).getWorkforceFocus());
+                game.getCityAt(GfxConstants.getPositionFromXY(x,y)).getProduction() +
+                ". Treasury: " + game.getCityAt(GfxConstants.getPositionFromXY(x,y)).getTreasury() +
+                ". Workforce Focus: " +game.getCityAt(GfxConstants.getPositionFromXY(x,y)).getWorkforceFocus());
         }
     }
 }

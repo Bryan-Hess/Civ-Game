@@ -1,4 +1,4 @@
-package hotciv.visual.standard;
+package hotciv.standard;
 
 import hotciv.framework.Tile;
 
