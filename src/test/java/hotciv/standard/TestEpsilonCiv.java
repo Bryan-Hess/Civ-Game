@@ -2,13 +2,12 @@ package hotciv.standard;
 
 import hotciv.framework.*;
 
+import hotciv.visual.standard.AttackStrategyImpl;
+import hotciv.visual.standard.EpsilonCivFactory;
+import hotciv.visual.standard.GameImpl;
 import org.junit.*;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 
 public class TestEpsilonCiv {

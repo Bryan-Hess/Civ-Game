@@ -1,4 +1,4 @@
-package hotciv.standard;
+package hotciv.visual.standard;
 
 import hotciv.framework.GameConstants;
 import hotciv.framework.Player;

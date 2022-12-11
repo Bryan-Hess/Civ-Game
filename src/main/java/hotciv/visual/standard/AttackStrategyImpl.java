@@ -1,7 +1,6 @@
-package hotciv.standard;
+package hotciv.visual.standard;
 
 import hotciv.framework.*;
-import hotciv.standard.GameImpl;
 
 import static java.util.Objects.isNull;
 

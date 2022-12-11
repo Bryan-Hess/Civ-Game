@@ -1,9 +1,9 @@
-package hotciv.standard;
+package hotciv.visual.standard;
 
 import hotciv.framework.*;
 
-public class ZetaCivFactory implements VariationFactory {
-    public DecideWinner createDecideWinnerStrategy(){ return new DecideWinnerImpl(GameConstants.ZETACIV); }
+public class AlphaCivFactory implements VariationFactory {
+    public DecideWinner createDecideWinnerStrategy(){ return new DecideWinnerImpl(GameConstants.ALPHACIV); }
     public ArcherAction createArcherActionStrategy(){ return new ArcherActionImpl(GameConstants.ALPHACIV); }
     public SettlerAction createSettlerActionStrategy(){ return new SettlerActionImpl(GameConstants.ALPHACIV); }
     public WorldAging createWorldAgingStrategy(){ return new WorldAgingImpl(GameConstants.ALPHACIV); }

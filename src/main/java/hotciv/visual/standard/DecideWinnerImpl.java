@@ -1,11 +1,9 @@
-package hotciv.standard;
+package hotciv.visual.standard;
 
 import hotciv.framework.*;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 public class DecideWinnerImpl implements DecideWinner {
 

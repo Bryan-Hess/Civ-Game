@@ -4,6 +4,9 @@ import hotciv.framework.Game;
 import hotciv.framework.GameConstants;
 import hotciv.framework.Player;
 import hotciv.framework.Position;
+import hotciv.visual.standard.AlphaCivFactory;
+import hotciv.visual.standard.GameImpl;
+import hotciv.visual.standard.TranscriptImpl;
 import org.junit.Before;
 import org.junit.Test;
 
