@@ -37,8 +37,6 @@ public class ShowSetFocus {
                                new HotCivFactory4(game) );
     editor.open();
     editor.showStatus("Click a tile to see Game's setFocus method being called.");
-
-    // TODO: Replace the setting of the tool with your SetFocusTool implementation.
     editor.setTool( new SetFocusTool(editor, game));
   }
 }

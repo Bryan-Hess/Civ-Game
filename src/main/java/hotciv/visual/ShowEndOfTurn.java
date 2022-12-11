@@ -37,8 +37,6 @@ public class ShowEndOfTurn {
                                new HotCivFactory4(game) );
     editor.open();
     editor.showStatus("Click to shield to see Game's endOfTurn method being called.");
-
-    // TODO: Replace the setting of the tool with your EndOfTurnTool implementation.
     editor.setTool( new EndTurnTool(game) );
   }
 }
