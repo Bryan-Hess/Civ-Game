@@ -134,7 +134,7 @@ public class CivDrawing
     //Clears selections of old list
     clearSelection();
 
-    //Remove city figures in drawling
+    //Remove city figures in drawing
     removeAllCityFigures();
 
     // Same process as unitMap

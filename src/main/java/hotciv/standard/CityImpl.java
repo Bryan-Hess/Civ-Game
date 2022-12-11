@@ -1,6 +1,7 @@
 package hotciv.standard;
 
 import hotciv.framework.City;
+import hotciv.framework.GameConstants;
 import hotciv.framework.Player;
 
 public class CityImpl implements City {
@@ -10,11 +11,14 @@ public class CityImpl implements City {
     private int size;
     private String production;
 
+    private String focus;
+
     public CityImpl(Player name){
         owner = name;
         size = 1;
         treasury = 0;
-        production = "";
+        production = GameConstants.ARCHER;
+        focus = GameConstants.productionFocus;
     }
     @Override
     public Player getOwner() {
@@ -34,7 +38,7 @@ public class CityImpl implements City {
     }
     @Override
     public String getWorkforceFocus() {
-        return null;
+        return focus;
     }
     @Override
     public void setProduction(String prod) {
