@@ -34,13 +34,13 @@ public class CompositionTool extends NullTool {
         this.setState(e, x, y);
 
         //call the tools, let the tools decide which action to perform
-        if(state == State.ACTION) {
+        if(state == State.ACTION)
             actionTool.mouseDown(e, x, y);
-        }else if(state == State.ENDTURN){
+        else if(state == State.ENDTURN)
             endTurnTool.mouseDown(e, x, y);
-        }else if(state == State.FOCUS){
+        else if(state == State.FOCUS)
             setFocusTool.mouseDown(e, x, y);
-        }
+
         unitMoveTool.mouseDown(e, x, y);
     }
 
@@ -50,15 +50,15 @@ public class CompositionTool extends NullTool {
     }
 
     public void setState(MouseEvent e, int x, int y){
-        //set the "State"
-        if (x>=550 && x<=590 && y>=60 && y<=105) { //on end of turn shield
+        //States
+        if (x>=550 && x<=590 && y>=60 && y<=105)//End of turn shield
             state = State.ENDTURN;
-        } else if (!e.isShiftDown() && game.getUnitAt(GfxConstants.getPositionFromXY(x,y)) != null || game.getCityAt(GfxConstants.getPositionFromXY(x,y)) != null){ //on a legit unit
+         else if (game.getCityAt(GfxConstants.getPositionFromXY(x,y))!=null||!e.isShiftDown() && game.getUnitAt(GfxConstants.getPositionFromXY(x,y))!=null) //Real unit
             state = State.FOCUS;
-        } else if (e.isShiftDown() && game.getUnitAt(GfxConstants.getPositionFromXY(x,y)) != null ){ // on a legit unit WITH shift pressed down
+         else if (e.isShiftDown() && game.getUnitAt(GfxConstants.getPositionFromXY(x,y))!=null ) //Real unit with shift
             state = State.ACTION;
-        } else{
+         else //Not valid
             state = null;
-        }
+
     }
 }

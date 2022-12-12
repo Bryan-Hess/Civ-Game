@@ -16,7 +16,7 @@ public class SetFocusTool extends NullTool {
     }
 
     public void mouseDown(MouseEvent e, int x, int y){
-        if (game.getUnitAt(GfxConstants.getPositionFromXY(x,y))!=null){
+        if (game.getUnitAt(GfxConstants.getPositionFromXY(x,y))!=null){ //Clicked on unit
             game.setTileFocus(GfxConstants.getPositionFromXY(x,y));
             editor.showStatus(
                 game.getUnitAt(GfxConstants.getPositionFromXY(x,y)).getOwner() + " " +
@@ -24,9 +24,9 @@ public class SetFocusTool extends NullTool {
                     ". Defense: " +game.getUnitAt(GfxConstants.getPositionFromXY(x,y)).getDefensiveStrength() +
                     ". Attack: " +game.getUnitAt(GfxConstants.getPositionFromXY(x,y)).getAttackingStrength());
         }
-        if (game.getCityAt(GfxConstants.getPositionFromXY(x,y))!=null){
+        if (game.getCityAt(GfxConstants.getPositionFromXY(x,y))!=null){ //Clicked on city
             game.setTileFocus(GfxConstants.getPositionFromXY(x,y));
-            editor.showStatus("Production " +
+            editor.showStatus("Production: " +
                 game.getCityAt(GfxConstants.getPositionFromXY(x,y)).getProduction() +
                 ". Treasury: " + game.getCityAt(GfxConstants.getPositionFromXY(x,y)).getTreasury() +
                 ". Workforce Focus: " +game.getCityAt(GfxConstants.getPositionFromXY(x,y)).getWorkforceFocus());

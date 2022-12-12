@@ -227,24 +227,21 @@ public class CivDrawing
     Unit u = game.getUnitAt(position);
     City c = game.getCityAt(position);
 
-    boolean unitExists = u != null;
-    boolean cityExists = c != null;
-
     remove(cityShield);
     remove(cityProduction);
     remove(cityWorkforce);
     remove(movesLeft);
     remove(unitShield);
 
-    if (unitExists){
+    if (u!=null){
       createUnitShield(u);
-      createUnitMovesLeftText(u);
+      createMovesLeft(u);
     }
 
-    if (cityExists) {
-      createCityOwnerIcon(c);
-      createCityProductionIcon(c);
-      createCityWorkforceIcon(c);
+    if (c!=null) {
+      createCityOwner(c);
+      createCityProd(c);
+      createWorkforce(c);
     }
   }
 
@@ -267,7 +264,7 @@ public class CivDrawing
       ageText.setText(Math.abs(age) + "AC");
   }
 
-  private void createUnitMovesLeftText(Unit unit) {
+  private void createMovesLeft(Unit unit) {
     movesLeft = new TextFigure("999",
             new Point(GfxConstants.UNIT_COUNT_X,
                     GfxConstants.UNIT_COUNT_Y));
@@ -275,35 +272,35 @@ public class CivDrawing
     delegate.add(movesLeft);
   }
 
-  private void createCityOwnerIcon(City city) {
-    cityShield = new DefaultFigure(convertShieldToOwner(city.getOwner()),
+  private void createCityOwner(City city) {
+    cityShield = new GeneralFigure(convertShieldToOwner(city.getOwner()),
             new Point(GfxConstants.CITY_SHIELD_X,
                     GfxConstants.CITY_SHIELD_Y),
-            GfxConstants.CITY_TYPE_STRING);
+            "CITY_TYPE");
     delegate.add(cityShield);
   }
 
-  private void createCityProductionIcon(City city) {
-    cityProduction = new DefaultFigure(city.getProduction() ,
+  private void createCityProd(City city) {
+    cityProduction = new GeneralFigure(city.getProduction() ,
             new Point(GfxConstants.CITY_PRODUCTION_X,
                     GfxConstants.CITY_PRODUCTION_Y),
-            GfxConstants.PRODUCTION_TYPE_STRING);
+            "PRODUCTION_TYPE");
     delegate.add(cityProduction);
   }
 
-  private void createCityWorkforceIcon(City city) {
-    cityWorkforce = new DefaultFigure(city.getWorkforceFocus() ,
+  private void createWorkforce(City city) {
+    cityWorkforce = new GeneralFigure(city.getWorkforceFocus() ,
             new Point(GfxConstants.WORKFORCEFOCUS_X,
                     GfxConstants.WORKFORCEFOCUS_Y),
-            GfxConstants.WORKFORCE_TYPE_STRING);
+            "WORKFORCE_TYPE");
     delegate.add(cityWorkforce);
   }
 
   private void createUnitShield(Unit unit) {
-    unitShield = new DefaultFigure(convertShieldToOwner(unit.getOwner()),
+    unitShield = new GeneralFigure(convertShieldToOwner(unit.getOwner()),
             new Point(GfxConstants.UNIT_SHIELD_X,
                     GfxConstants.UNIT_SHIELD_Y ),
-            GfxConstants.UNIT_SHIELD_TYPE_STRING);
+            "UNITSHIELD_TYPE");
     delegate.add(unitShield);
   }
 

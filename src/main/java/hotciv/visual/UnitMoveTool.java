@@ -59,16 +59,13 @@ public class UnitMoveTool extends NullTool {
     public void mouseUp(MouseEvent e, int x, int y){
         editor.drawing().unlock();
 
-        if (dragFigure != null) {
+        if (dragFigure != null) { //On successful drag of unit
             Position to = getPositionFromXY(x,y);
 
-            boolean success = game.moveUnit(from, to);
-            if (success) {
-                System.out.print("from " + from + " to " + to);
-            }
-            else {
+            if (game.moveUnit(from, to))
+                System.out.print("from "+from+" to "+to);
+            else
                 ((CivDrawing) editor.drawing()).worldChangedAt(from);
-            }
         }
 
         dragFigure = null;

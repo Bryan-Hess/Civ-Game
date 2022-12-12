@@ -13,7 +13,7 @@ public class EndTurnTool extends NullTool {
     }
 
     public void mouseDown(MouseEvent e, int x, int y) {
-        if (x>=550 && x<=590 && y>=60 && y<=105)
+        if (x>=550 && x<=590 && y>=60 && y<=105) //Ends turn on shield press
             game.endOfTurn();
     }
 }
