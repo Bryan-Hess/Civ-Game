@@ -20,4 +20,6 @@ public interface WorldLayout {
     public int getRound();
     public void incrementRound();
     public void setTile(Position p, String t);
+
+    public int[] getSurroundingTileCount(Position position);
 }
