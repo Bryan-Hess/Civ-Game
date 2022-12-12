@@ -100,6 +100,8 @@ class CityStub implements City {
   public String getProduction() {
     return null;
   }
+
+  public void setWorkforceFocus(String balance){ ;}
   public String getWorkforceFocus() {
     return null;
   }
@@ -108,4 +110,11 @@ class CityStub implements City {
   public void setProduction(String prod){}
   public void setTreasury(int amount){}
   public void setSize(int s){}
+
+  public int getFood(){ return 0;}
+
+  public void setFood(int f){;
+  }
+
+  public void resetFood(){ }
 }
