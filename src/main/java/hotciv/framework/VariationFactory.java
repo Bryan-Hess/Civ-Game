@@ -1,7 +1,5 @@
 package hotciv.framework;
 
-import hotciv.standard.Transcript;
-
 public interface VariationFactory {
     public WorldAging createWorldAgingStrategy();
     public ArcherAction createArcherActionStrategy();

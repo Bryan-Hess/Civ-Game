@@ -40,4 +40,6 @@ public class Transcript implements Game {
     public Game getGame(){ return game; }
     public void commitToTranscript( String s ){ game.commitToTranscript(s); }
     public ArrayList<String> getTranscript(){ return game.getTranscript(); }
+    public void setTileFocus(Position position) { game.setTileFocus(position); }
+    public void addObserver(GameObserver observer) { game.addObserver(observer); }
 }

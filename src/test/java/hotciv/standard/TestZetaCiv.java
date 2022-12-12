@@ -1,6 +1,8 @@
 package hotciv.standard;
 
 import hotciv.framework.*;
+import hotciv.standard.GameImpl;
+import hotciv.standard.ZetaCivFactory;
 import org.junit.Before;
 import org.junit.Test;
 
