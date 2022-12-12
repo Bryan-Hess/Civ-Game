@@ -2,7 +2,6 @@ package hotciv.standard;
 
 import hotciv.framework.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;

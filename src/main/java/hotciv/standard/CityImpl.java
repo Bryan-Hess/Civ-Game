@@ -12,19 +12,17 @@ public class CityImpl implements City {
     private int food;
     private int populationSize;
     private String production;
-
-
-
     private String focus;
-
-
 
     public CityImpl(Player name){
         owner = name;
         populationSize = 1;
         treasury = 0;
+
         food = 0;
-        production = "";
+       
+        production = GameConstants.ARCHER;
+
         focus = GameConstants.productionFocus;
     }
     @Override

@@ -48,6 +48,8 @@ public class GameImpl implements Game {
     private VariationFactory factory;
     private ArrayList<String> transcript = new ArrayList<>();
 
+    private GameObserver gameObserver;
+
     //Declares the implementations based on the Civ variant
     public void setWorldAgingVariation(String civVar){
     WorldAging = new WorldAgingImpl(civVar);
@@ -93,6 +95,17 @@ public class GameImpl implements Game {
         //Game starts on Red player in year 4000BC
         currentPlayer = Player.RED;
         currentAge = -4000;
+
+        //Empty IMPL for when observer is not attached to avoid null returns
+        gameObserver = new GameObserver() {
+            @Override
+            public void worldChangedAt(Position pos) {}
+            @Override
+            public void turnEnds(Player nextPlayer, int age) {}
+            @Override
+            public void tileFocusChangedAt(Position position) {}
+        };
+        this.addObserver(gameObserver);
     }
 
     //Getters for tiles/units/cities/player
@@ -130,6 +143,8 @@ public class GameImpl implements Game {
               worldLayout.moveUnitTo(to,from);
               worldLayout.removeUnitAt(from);
               worldLayout.getUnitAt(to).countMove();
+              gameObserver.worldChangedAt(from);
+              gameObserver.worldChangedAt(to);
               return true;
           }
           return false;
@@ -153,6 +168,9 @@ public class GameImpl implements Game {
         if(worldLayout.getUnitAt(to)!=null){
             boolean retVal;
             retVal = pvpCombat(from, to);
+            //Possibly need to check if retVal==true
+            gameObserver.worldChangedAt(from);
+            gameObserver.worldChangedAt(to);
             return retVal;
         }
 
@@ -167,6 +185,8 @@ public class GameImpl implements Game {
         worldLayout.moveUnitTo(to,from);
         worldLayout.removeUnitAt(from);
         worldLayout.getUnitAt(to).countMove();
+        gameObserver.worldChangedAt(from);
+        gameObserver.worldChangedAt(to);
         return true;
     }
     public boolean pvpCombat( Position from, Position to ) {
@@ -198,6 +218,7 @@ public class GameImpl implements Game {
             }
         }
         worldLayout.incrementRound();
+        gameObserver.turnEnds(getPlayerInTurn(), getAge());
       }
     public void changeWorkForceFocusInCityAt( Position p, String balance ) {
         if(worldLayout.getCityAt(p).getOwner().equals(currentPlayer)) {
@@ -309,9 +330,18 @@ public class GameImpl implements Game {
     public void commitToTranscript(String s){
         transcript.add(s);
     }
-    public ArrayList<String> getTranscript(){
-        return transcript;
+    public ArrayList<String> getTranscript(){ return transcript; }
+
+    public void setTileFocus(Position position) {
+        if(getTileAt(position)!=null)
+            getTileAt(position);
+        else if(getCityAt(position)!=null)
+            getCityAt(position);
+
+        gameObserver.tileFocusChangedAt(position);
     }
+
+    public void addObserver(GameObserver observer) {gameObserver = observer;}
 }
 
 
